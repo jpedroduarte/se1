@@ -1,15 +1,18 @@
 
 insight: Lab3.axf
-	arm-none-eabi-insight Log.axf
+	arm-none-eabi-insight Lab3.axf
 
-Lab3.axf: Delay.o init.o main.o /home/isel/SE1/bsp/ldscript
-	arm-none-eabi-ld Delay.o -o main.o init.o -T /home/isel/SE1/bsp/ldscript
+Lab3.axf: Delay.o initSam.o mainprog.o
+	arm-none-eabi-ld Delay.o initSam.o  mainprog.o -T /home/isel/SE1/bsp/ldscript_ram libled.a -o Lab3.axf
 	
-Delay.o: Delay.s
-	arm-none-eabi-as Delay.s -o Delay.o -g
+Delay.o: Delay.S
+	arm-none-eabi-as Delay.S -o Delay.o -g
 
-init.o: init.s
-	arm-none-eabi-as init.s -o init.o -g
+initSam.o: initSam.S
+	arm-none-eabi-as initSam.S -o initSam.o -g
 	
-main.o: main.c
-	gcc -c -g main.c -o main.o -std=c99
+mainprog.o: mainprog.c
+	arm-none-eabi-gcc -c -g mainprog.c -o mainprog.o
+	
+clean: 
+	rm *.o Lab3.axf
