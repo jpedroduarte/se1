@@ -1,5 +1,5 @@
-#ifndef LPC2xxx.h
-#define LPC2xxx.h
+#ifndef LPC2xxx_h
+#define LPC2xxx_h
 
 typedef struct{
 	volatile unsigned int IOPIN;
