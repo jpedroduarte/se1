@@ -2,8 +2,11 @@
 insight: Lab4.axf
 	arm-none-eabi-insight Lab4.axf
 
-Lab4.axf: Delay.o main.o keyboard.o initSam.o led.o
-	arm-none-eabi-ld Delay.o main.o keyboard.o initSam.o led.o -T /home/user/Desktop/host-se1/se1/bsp/ldscript_ram -o Lab4.axf
+Lab4.axf: Delay.o main.o keyboard.o initSam.o led.o gpio.o
+	arm-none-eabi-ld Delay.o main.o keyboard.o initSam.o led.o gpio.o -T /home/user/Desktop/host-se1/se1/bsp/ldscript_ram -o Lab4.axf
+
+gpio.o: gpio.c
+	arm-none-eabi-gcc -c -g gpio.c -o gpio.o
 
 keyboard.o: keyboard.c
 	arm-none-eabi-gcc -c -g keyboard.c -o keyboard.o
