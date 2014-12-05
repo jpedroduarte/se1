@@ -24,6 +24,26 @@ typedef struct {
 	LPC2xxx_REG PREINT, PREFRAC;
 } LPC210X_RTC;
 
+typedef struct {
+	LPC2xxx_REG IR;
+	LPC2xxx_REG TCR;
+	LPC2xxx_REG TC;
+	LPC2xxx_REG PR;
+	LPC2xxx_REG PC;
+	LPC2xxx_REG MCR;
+	LPC2xxx_REG MR0;
+	LPC2xxx_REG MR1;
+	LPC2xxx_REG MR2;
+	LPC2xxx_REG MR3;
+	LPC2xxx_REG CCR;
+	LPC2xxx_REG CR0;
+	LPC2xxx_REG CR1;
+	LPC2xxx_REG CR2;
+	LPC2xxx_REG CR3;
+	LPC2xxx_REG EMR;
+	LPC2xxx_REG RESERVED[12]; /* Dummy */
+	LPC2xxx_REG CTCR;
+} LPC210X_TC;
 
 
 #endif 
