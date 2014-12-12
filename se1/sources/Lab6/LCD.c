@@ -1,5 +1,5 @@
 #include <time.h>
-#include "GPIO.c"
+#include "GPIO.h"
 #include "LCD.h"
 
 unsigned int data_mask = 0x00000F00;

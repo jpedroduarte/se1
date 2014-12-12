@@ -1,5 +1,5 @@
 #include "keyboard.h"
-#include "GPIO.c"
+#include "GPIO.h"
 
 //mudar as mascaras do config para aqui
 unsigned int col_mask  = 0x000000F0;
