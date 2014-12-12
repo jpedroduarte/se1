@@ -12,8 +12,7 @@ utilizando 2 linhas com 16 colunas e comunicação a 4 bits. */
 void LCD_Init(void){
 	unsigned int mask = rs|enable|data_mask;
 	GPIO_config( mask, mask, 0);
-	
-	
+
 }
 
 /* Escreve um carácter na posição corrente do cursor. */
