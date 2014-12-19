@@ -21,7 +21,7 @@ void TMR0_Init(unsigned int frequency){
 	TIMER0.CR3;							//Capture Register
 	TIMER0.EMR= 0x00000000;				//External Match Register- Do Nothing
 	TIMER0.RESERVED[12]; 				/* Dummy */
-	TIMER0.CTCR= 0x0 | 0x1; 			//Counter mode: TC incremented every rising edge
+	TIMER0.CTCR= 0; 			        //Counter mode: TC incremented every rising edge
 }
 
 /* Devolve o valor corrente do Timer 0 em unidades de contagem (ticks). */
