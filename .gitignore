@@ -1,4 +1,5 @@
 #ignorar a pasta #
 *.o
+*.axf
 Ferramentas/
 sources/Mine
