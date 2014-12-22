@@ -1,3 +1,4 @@
 #ignorar a pasta #
+*.o
 Ferramentas/
 sources/Mine

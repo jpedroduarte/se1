@@ -23,7 +23,7 @@ void KBD_Init(unsigned int layout[16]){
 bloqueante. */
 int KBD_Hit(void){
 	unsigned input = GPIO_input();
-	int res = input & line_mask;
+	int res = (input & line_mask) >>4 ;
 	
 	return res != 0;
 }
