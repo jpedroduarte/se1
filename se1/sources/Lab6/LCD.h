@@ -1,6 +1,10 @@
 #ifndef LCD_H
 #define LCD_H
 
+void write_Nibble(int rs, unsigned int data);
+
+void write_Byte(int rs, int c);
+
 /* Faz a iniciação do sistema para permitir o acesso ao periférico
 utilizando 2 linhas com 16 colunas e comunicação a 4 bits. */
 void LCD_Init(void);

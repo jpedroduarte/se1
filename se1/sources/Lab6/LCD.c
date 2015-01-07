@@ -6,6 +6,17 @@ unsigned int data_mask = 0x00000F00;
 unsigned int rs_mask = 0x00002000;
 unsigned int enable_mask = 0x00001000;
 
+void write_Nibble(int rs, unsigned int data){
+	GPIO_output(enable_mask,enable_mask);
+	rs = rs? rs_mask :0;
+	GPIO_output(rs,rs_mask);
+	GPIO_output(data<<8, data_mask);
+}
+
+void write_Byte(int rs, int c){
+		write_Nibble(rs,c >> 4);
+		write_Nibble(rs,c);
+}
 
 /* Faz a iniciação do sistema para permitir o acesso ao periférico
 utilizando 2 linhas com 16 colunas e comunicação a 4 bits. */
@@ -16,14 +27,14 @@ void LCD_Init(void){
 	write_Nibble(0,0x03);
 	//Por um time.sleep(5);
 	write_Nibble(0,0x03);
-	writeNibble(0,0x3);
-	writeNibble(0,0x2);
+	write_Nibble(0,0x3);
+	write_Nibble(0,0x2);
 
-	writeByte(0,0x28);
-	writeByte(0,0x08);
-	writeByte(0,0x01);
-	writeByte(0,0x06);
-	writeByte(0,0x0D);
+	write_Byte(0,0x28);
+	write_Byte(0,0x08);
+	write_Byte(0,0x01);
+	write_Byte(0,0x06);
+	write_Byte(0,0x0D);
 	
 }
 
@@ -52,14 +63,4 @@ void LCD_Clear(void){
 	//time.sleep(2);
 }
 
-void write_Byte(int rs, int c){
-		write_Nibble(rs,c >> 4);
-		write_Nibble(rs,c);
-}
 
-void write_Nibble(int rs, unsigned int data){
-	GPIO_output(1,enable_mask);
-	GPIO_output(rs,rs_mask);
-	
-	GPIO_output(data, data_mask);
-}
