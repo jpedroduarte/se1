@@ -3,8 +3,8 @@
 #include "LCD.h"
 
 unsigned int data_mask = 0x00000F00;
-unsigned int rs_mask = 0x00001000;
-unsigned int enable_mask = 0x00002000;
+unsigned int rs_mask = 0x00002000;
+unsigned int enable_mask = 0x00001000;
 
 
 /* Faz a iniciação do sistema para permitir o acesso ao periférico
