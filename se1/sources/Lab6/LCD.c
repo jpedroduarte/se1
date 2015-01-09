@@ -1,6 +1,9 @@
 #include <time.h>
+#include "Timer.h"
 #include "GPIO.h"
 #include "LCD.h"
+
+
 
 unsigned int data_mask = 0x00000F00;
 unsigned int rs_mask = 0x00002000;
@@ -32,10 +35,20 @@ utilizando 2 linhas com 16 colunas e comunicação a 4 bits. */
 void LCD_Init(void){
 	unsigned int mask = rs_mask|enable_mask|data_mask;
 	GPIO_config( mask, mask, 0);
+	
+	unsigned now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 60);
+	
 	//Por um time.sleep(60);
 	write_Nibble(0,0x03);
-	//Por um time.sleep(5);
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 10);
+	
+	//Por um time.sleep(10);
 	write_Nibble(0,0x03);
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 1);
+	//Por um time.sleep(1);
 	write_Nibble(0,0x3);
 	write_Nibble(0,0x2);
 
@@ -44,6 +57,9 @@ void LCD_Init(void){
 	write_Byte(0,0x01);
 	write_Byte(0,0x06);
 	write_Byte(0,0x0D);
+	//Por um time.sleep(10);
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 10);
 	
 }
 
@@ -54,7 +70,7 @@ void LCD_WriteChar(char ch){
 
 /* Escreve uma string na posição corrente do cursor. */
 void LCD_WriteString(char *str){
-	while(str){
+	while(*str){
 		write_Byte(1,*str);
 		++str;
 	}
