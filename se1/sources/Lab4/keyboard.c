@@ -32,7 +32,6 @@ int KBD_Hit(void){
 int KBD_Read(void){
 	unsigned int i, init_col = 0x100, last_col = 0x800;
 	unsigned int line, aux, col;
-	
 	for(i=init_col;  ; i<<=1){
 		if(i > last_col)
 			i=init_col;
