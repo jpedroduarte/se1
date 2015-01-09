@@ -50,13 +50,21 @@ void LCD_Init(void){
 	while(TMR0_Elapsed(now) < 1);
 	//Por um time.sleep(1);
 	write_Nibble(0,0x3);
+	
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 10);
 	write_Nibble(0,0x2);
-
-	write_Byte(0,0x28);
+	
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 10);write_Byte(0,0x28);
 	write_Byte(0,0x08);
-	write_Byte(0,0x01);
+	
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 10);write_Byte(0,0x01);
 	write_Byte(0,0x06);
-	write_Byte(0,0x0D);
+	
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 10);write_Byte(0,0x0D);
 	//Por um time.sleep(10);
 	now = TMR0_GetValue();
 	while(TMR0_Elapsed(now) < 10);
@@ -70,7 +78,11 @@ void LCD_WriteChar(char ch){
 
 /* Escreve uma string na posição corrente do cursor. */
 void LCD_WriteString(char *str){
+	unsigned now;
 	while(*str){
+		char c = *str;
+		now = TMR0_GetValue();
+		while(TMR0_Elapsed(now) < 10);
 		write_Byte(1,*str);
 		++str;
 	}
@@ -78,7 +90,7 @@ void LCD_WriteString(char *str){
 
 /* Posiciona o cursor na linha x e coluna y do mostrador. */
 void LCD_Goto(int x, int y){
-	write_Byte(0,(y==0)? 0x80+x:0xC0+x );
+	write_Byte(0,(x==0)? 0x80+y:0xC0+y );
 	//time.sleep(2);
 }
 
