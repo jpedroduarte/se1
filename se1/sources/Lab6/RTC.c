@@ -35,6 +35,7 @@ void RTC_Init(struct tm *dateTime){
 	RTC.ALMON, 
 	RTC.ALYEAR;
 	* 
+	* 
 	/* Reference Clock Divider */
 	
 	RTC.PREINT= (LPC2106_PCLK/32768) - 1;
