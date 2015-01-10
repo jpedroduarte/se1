@@ -7,7 +7,7 @@ void TMR0_Init(unsigned int frequency){
 	TIMER0.IR= 0x00000000;
 	TIMER0.TCR= 0x00000000;
 	TIMER0.TC;							//Overflow counter
-	TIMER0.PR= LPC2106_PCLK/frequency; 	//Maximum value possible for the Prescale Counter
+	TIMER0.PR= (LPC2106_PCLK/frequency) -1; 	//Maximum value possible for the Prescale Counter
 	TIMER0.PC; 							//Prescale Counter
 	TIMER0.MCR=	0x0000000;				//Match Control Register- Feature Disabled
 	TIMER0.MR0;							//Match Register- Not used
