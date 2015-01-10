@@ -6,10 +6,17 @@ static unsigned long result[3];
 /* Apaga o conteúdo de um sector, ou de múltiplos sectores, da FLASH. Para apagar
 apenas um sector, deve usar-se o mesmo número de sector para os dois parâmetros. */
 unsigned int FLASH_EraseSectors(unsigned int startSector, unsigned int endSector){
-	command[0]=ERASE_SECTORS;
-	command[1]=startSector;
-	command[2]=endSector;
+	command[0]=PREPARE_SECTORS_FOR_WRITE_OPERATION;
+	command[1]= startSector;
+	commando[2]= endSector;
 	iap_entry(command,result);
+	if(result[0]== CMD_SUCCESS){
+		command[0]=ERASE_SECTORS;
+		command[1]=startSector;
+		command[2]=endSector;
+		iap_entry(command,result);
+	}
+	return result[0];
 }
 
 /* Escreve o bloco de dados referenciado por srcAddr, de dimensão size bytes, no
@@ -21,12 +28,14 @@ unsigned int FLASH_WriteBlock( void *dstAddr, void *srcAddr, unsigned int size){
 	command[1]= getSectorNumberFromAddr(dstAddr);
 	command[2]= getSectorNumberFromAddr((dstAddr+size);
 	iap_entry(command,result);
-	command[0]= COPY_RAM_TO_FLASH;
-	command[1]= dstAddr;
-	command[2]= srcAddr;
-	command[3]= size;
-	command[4]= LPC2106_CCLK/1000;
-	iap_entry(command,result);
+	if(result[0]== CMD_SUCCESS){
+		command[0]= COPY_RAM_TO_FLASH;
+		command[1]= dstAddr;
+		command[2]= srcAddr;
+		command[3]= size;
+		command[4]= LPC2106_CCLK/1000;
+		iap_entry(command,result);
+	}
 	return result[0];
 }
 
@@ -38,15 +47,15 @@ unsigned int FLASH_WriteData(void *dstAddr, void *srcAddr, unsigned int size){
 	command[2] getSectorNumberFromAddr(dstAddr+size);
 	command[3]= LPC2106_CCLK/1000;
 	iap_entry(command,result);
-	if(result[0] & 0x1){	//CMD_SUCCESS
+	if(result[0]==CMD_SUCCESS){	//CMD_SUCCESS
 		command[0]= COPY_RAM_TO_FLASH;
 		command[1]= dstAddr;
 		command[2]= srcAddr;
 		command[3]= size;
 		command[4]= LPC2106_CCLK/1000;
 		iap_entry(command,result);
-	} else return 1;
-	return 0;
+	}
+	return result[0];
 }
 
 /* Compara o conteúdo do bloco de dados referenciado por srcAddr, de dimensão size
