@@ -4,7 +4,7 @@
 #include "LCD.h"
 
 
-
+unsigned now;
 unsigned int data_mask = 0x00000F00;
 unsigned int rs_mask = 0x00002000;
 unsigned int enable_mask = 0x00001000;
@@ -36,19 +36,16 @@ void LCD_Init(void){
 	unsigned int mask = rs_mask|enable_mask|data_mask;
 	GPIO_config( mask, mask, 0);
 	
-	unsigned now = TMR0_GetValue();
+	now = TMR0_GetValue();
 	while(TMR0_Elapsed(now) < 60);
-	
-	//Por um time.sleep(60);
 	write_Nibble(0,0x03);
-	now = TMR0_GetValue();
-	while(TMR0_Elapsed(now) < 10);
 	
-	//Por um time.sleep(10);
-	write_Nibble(0,0x03);
 	now = TMR0_GetValue();
-	while(TMR0_Elapsed(now) < 1);
-	//Por um time.sleep(1);
+	while(TMR0_Elapsed(now) < 10);	
+	write_Nibble(0,0x03);
+	
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 5);
 	write_Nibble(0,0x3);
 	
 	now = TMR0_GetValue();
@@ -56,16 +53,25 @@ void LCD_Init(void){
 	write_Nibble(0,0x2);
 	
 	now = TMR0_GetValue();
-	while(TMR0_Elapsed(now) < 10);write_Byte(0,0x28);
+	while(TMR0_Elapsed(now) < 10);
+	write_Byte(0,0x28);
+	
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 10);
 	write_Byte(0,0x08);
 	
 	now = TMR0_GetValue();
-	while(TMR0_Elapsed(now) < 10);write_Byte(0,0x01);
+	while(TMR0_Elapsed(now) < 10);
+	write_Byte(0,0x01);
+	
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 10);
 	write_Byte(0,0x06);
 	
 	now = TMR0_GetValue();
-	while(TMR0_Elapsed(now) < 10);write_Byte(0,0x0D);
-	//Por um time.sleep(10);
+	while(TMR0_Elapsed(now) < 10);
+	write_Byte(0,0x0F);
+	
 	now = TMR0_GetValue();
 	while(TMR0_Elapsed(now) < 10);
 	
@@ -78,7 +84,6 @@ void LCD_WriteChar(char ch){
 
 /* Escreve uma string na posição corrente do cursor. */
 void LCD_WriteString(char *str){
-	unsigned now;
 	while(*str){
 		char c = *str;
 		now = TMR0_GetValue();
@@ -90,14 +95,16 @@ void LCD_WriteString(char *str){
 
 /* Posiciona o cursor na linha x e coluna y do mostrador. */
 void LCD_Goto(int x, int y){
-	write_Byte(0,(x==0)? 0x80+y:0xC0+y );
-	//time.sleep(2);
+	write_Byte(0,(0x80 | x <<6 | (0x3F & y)));
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 2);
 }
 
 /* Limpa o visor, usando o comando disponível na API do periférico. */
 void LCD_Clear(void){
-	write_Nibble(0,0x01);
-	//time.sleep(2);
+	write_Byte(0,0x01);
+	now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < 2);
 }
 
 

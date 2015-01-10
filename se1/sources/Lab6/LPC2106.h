@@ -16,5 +16,6 @@
 
 #define LPC2106_BASE_TC0 ( *( (LPC210X_TC *) 0xE0004000) ) //TIMER 0
 #define LPC2106_BASE_TC1 ( *( (LPC210X_TC *) 0xE0008000) ) //TIMER 1
+#define LPC2106_BASE_RTC ( *( (LPC210X_RTC *) 0xE0024000) ) //RTC
 
 #endif
