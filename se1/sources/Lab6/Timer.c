@@ -24,7 +24,7 @@ void TMR0_Init(unsigned int frequency){
 	LPC2106_BASE_TC0.EMR= 0x00000000;				//External Match Register- Do Nothing
 	//LPC2106_BASE_TC0.RESERVED[12]; 				/* Dummy */
 	LPC2106_BASE_TC0.CTCR= 0;			            //Counter mode: TC incremented every rising edge
-	LPC2106_BASE_TC0.TCR= 0x00000001;
+	LPC2106_BASE_TC0.TCR= 0x00000001;				//Enable Counter
 }
 
 /* Devolve o valor corrente do Timer 0 em unidades de contagem (ticks). */

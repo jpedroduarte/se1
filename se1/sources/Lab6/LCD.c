@@ -9,11 +9,12 @@ unsigned int data_mask = 0x00000F00;
 unsigned int rs_mask = 0x00002000;
 unsigned int enable_mask = 0x00001000;
 
+static void setEnable(){
 void setEnable(){
     GPIO_output(enable_mask,enable_mask);
 }
 
-void resetEnable(){
+static void resetEnable(){
     GPIO_output(0,enable_mask);
 }
 
@@ -67,7 +68,7 @@ void LCD_Init(void){
 	now = TMR0_GetValue();
 	while(TMR0_Elapsed(now) < 10);
 	write_Byte(0,0x06);
-	
+
 	now = TMR0_GetValue();
 	while(TMR0_Elapsed(now) < 10);
 	write_Byte(0,0x0F);
