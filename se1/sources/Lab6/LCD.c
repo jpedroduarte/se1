@@ -10,7 +10,6 @@ unsigned int rs_mask = 0x00002000;
 unsigned int enable_mask = 0x00001000;
 
 static void setEnable(){
-void setEnable(){
     GPIO_output(enable_mask,enable_mask);
 }
 
