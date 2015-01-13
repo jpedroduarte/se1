@@ -27,6 +27,6 @@ main.o: main.c
 
 initSam.o: initSam.S
 	arm-none-eabi-as initSam.S -o initSam.o -g
-	
+
 clean: 
 	rm *.o *.axf
