@@ -35,9 +35,11 @@ utilizando 2 linhas com 16 colunas e comunicação a 4 bits. */
 void LCD_Init(void){
 	unsigned int mask = rs_mask|enable_mask|data_mask;
 	GPIO_config( mask, mask, 0);
+
+	TMR0_Delay(60);
+	//now = TMR0_GetValue();
+	//while(TMR0_Elapsed(now) < 60);
 	
-	now = TMR0_GetValue();
-	while(TMR0_Elapsed(now) < 60);
 	write_Nibble(0,0x03);
 	
 	now = TMR0_GetValue();

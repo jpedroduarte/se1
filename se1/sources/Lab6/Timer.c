@@ -38,3 +38,8 @@ unsigned int TMR0_Elapsed(unsigned int lastRead){
 	 unsigned int now= TMR0_GetValue();
 	 return now-lastRead;
 }
+
+void TMR0_Delay(unsigned t){
+	unsigned now = TMR0_GetValue();
+	while(TMR0_Elapsed(now) < t);
+}

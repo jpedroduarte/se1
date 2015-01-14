@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "lcd.h"
-#include "Timer.h"
-#include "RTC.h"
-#include "/home/user/Desktop/host-se1/se1/includes/menusManutencao.h"
+#include "/home/user/Desktop/host-se1/se1/includes/liblpc2106.h"
+//#include "/home/user/Desktop/host-se1/se1/includes/liblcd.h"
+//#include "/home/user/Desktop/host-se1/se1/includes/libled.h"
 
 void n2str(char * str, int n, int p);
 void putYear(char * str, int n, int p);
@@ -19,10 +18,12 @@ int main() {
 	dateTime->tm_mday = 13;
 	dateTime->tm_mon	= 1;
 	dateTime->tm_year = 2015;
+	
 	RTC_Init(dateTime);
 	TMR0_Init(1000);
 	LCD_Init();
 	LED_Init(15,0);
+	
 	char *hour = "00-00-00";
 	char *date = "00-00-0000";
 	unsigned now;
@@ -30,10 +31,6 @@ int main() {
 	while(1){
 		RTC_GetValue(dateTime);
 
-			
-		
-		
-		
 		n2str(date, dateTime->tm_mday & 0x1F, 0);
 		n2str(date, dateTime->tm_mon & 0x0F, 3);
 		putYear(date, dateTime->tm_year, 6);
@@ -61,28 +58,7 @@ int main() {
 		
 		now = TMR0_GetValue();
 		while(TMR0_Elapsed(now) < 600);
-		//LCD_Clear();
 	}
-	/*
-	int i=0;
-	unsigned now;
-	TMR0_Init(1000);
-	LCD_Init();
-	LCD_WriteString("Modo de");
-	LCD_Goto(1,0);
-	LCD_WriteString(menus_l2[5]);
-	now = TMR0_GetValue();
-	while(TMR0_Elapsed(now) < 3000);
-	while(i<6){
-		LCD_Clear();
-		LCD_WriteString(menus_l1[i]);
-		LCD_Goto(1,0);
-		LCD_WriteString(menus_l2[i]);
-		now = TMR0_GetValue();
-		while(TMR0_Elapsed(now) < 5000);
-		i++;
-	}
-	*/
 	return 0;
 }
 

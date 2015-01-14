@@ -2,12 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-#include "lcd.h"
-#include "Timer.h"
-#include "Led.h"
-#include "RTC.h"
-
 #include "Button.h"
 #include "/home/user/Desktop/host-se1/se1/includes/menu.h"
 
