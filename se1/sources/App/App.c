@@ -2,13 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-#include "lcd.h"
-#include "Timer.h"
-#include "Led.h"
-#include "RTC.h"
-
-#include "Button.h"
+#include "/home/user/Desktop/host-se1/se1/includes/Button.h"
+#include "/home/user/Desktop/host-se1/se1/includes/TempManagement.h"
 #include "/home/user/Desktop/host-se1/se1/includes/menu.h"
 
 const char *subMenuL1[] = {	"1 - Definir",
@@ -25,15 +20,22 @@ const char *subMenuL2[] = {	"TMax = 000 graus",
 							"    Temperaturas",
 							"      Manutencao"};
 
-
-
 int main() {
+	
 	TMR0_Init(1000);
+	
 	LCD_Init();
-	LED_Init(15,0);
+	
 	unsigned now;
+	
 	Button bUp =  BUTTON_Init(0);
 	Button bDown =  BUTTON_Init(1);
+	Button bOk =  BUTTON_Init(4);
+	
+	Cooling c = Cooling_Init(5);
+	Heating h = Heating_Init(6);
+	
+	Alarm a = Alarm_Init(15);
 	
 	Menu m = Menu_Create(6);
 	LCD_WriteString("MODO DE");
@@ -70,6 +72,12 @@ int main() {
 					LCD_WriteString(subMenuL2[m.currSubMenu-1]);
 			}
 		}
+		
+		if(BUTTON_getState(bOk)){
+			now = TMR0_GetValue();
+			while(TMR0_Elapsed(now) < 1000);
+		}
+		
 		now = TMR0_GetValue();
 		while(TMR0_Elapsed(now) < 1000);
 	}

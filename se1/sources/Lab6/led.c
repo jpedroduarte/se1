@@ -1,11 +1,11 @@
-#include "led.h"
-#include "GPIO.h"
+#include "/home/user/Desktop/host-se1/se1/includes/led.h"
+#include "/home/user/Desktop/host-se1/se1/includes/GPIO.h"
 
 static unsigned int dir_mask;
 
 /* 
  * pinID -> numero do pin do led
- * state-> ON = 0 OFF!=0
+ * state-> ON != 0 OFF == 0
  * */
 void LED_Init(int pinId, int state){
 	dir_mask = 1<<pinId;

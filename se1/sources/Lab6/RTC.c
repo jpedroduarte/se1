@@ -1,4 +1,4 @@
-#include "RTC.h";
+#include "/home/user/Desktop/host-se1/se1/includes/RTC.h";
 
 /* Faz a iniciação do sistema para permitir o acesso ao periférico RTC, que é iniciado com os valores do parâmetro datetime.
 Nota: A struct tm está definida na biblioteca standard da linguagem C. */

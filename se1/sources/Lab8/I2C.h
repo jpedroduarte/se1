@@ -2,7 +2,6 @@
 #define _I2C_H_
 
 
-
 /* Faz a iniciação do sistema para permitir o acesso ao controlador I2C. */
 void I2C_Init(void);
 
@@ -14,5 +13,6 @@ Os valores de retorno desta função correspondem aos valores do registo I2CSTAT
 controlador I2C. */
 unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int
 size, int freq);
+
 
 #endif
