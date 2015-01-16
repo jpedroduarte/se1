@@ -1,13 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "/home/user/Desktop/host-se1/se1/includes/liblpc2106.h"
-//#include "/home/user/Desktop/host-se1/se1/includes/liblcd.h"
-//#include "/home/user/Desktop/host-se1/se1/includes/libled.h"
 
 void n2str(char * str, int n, int p);
 void putYear(char * str, int n, int p);
-void Alarm();
 
 int main() {
 	///*
@@ -56,8 +52,7 @@ int main() {
 		LCD_Goto(1,6);
 		LCD_WriteString(date);
 		
-		now = TMR0_GetValue();
-		while(TMR0_Elapsed(now) < 600);
+		TMR0_Delay(600);
 	}
 	return 0;
 }

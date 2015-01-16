@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "LPC2xxx.h"
-#include "LPC2106.h"
-#include "GPIO.h"
+#include "/home/user/Desktop/host-se1/se1/includes/LPC2xxx.h"
+#include "/home/user/Desktop/host-se1/se1/includes/LPC2106.h"
+#include "/home/user/Desktop/host-se1/se1/includes/GPIO.h"
 
 void GPIO_config(unsigned int dir, unsigned int mask, unsigned int initvalue){	
 	dir &= mask;

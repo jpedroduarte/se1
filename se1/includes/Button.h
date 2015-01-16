@@ -1,8 +1,6 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "GPIO.h"
-
 typedef struct Button{
 	int pinMask;
 } Button;

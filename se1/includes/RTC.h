@@ -1,9 +1,9 @@
-#ifndef RTC_H
-#define RTC_H
+#ifndef _RTC_H
+#define _RTC_H
 
+#include <time.h>
 #include "LPC2xxx.h"
 #include "LPC2106.h"
-#include <time.h>
 
 void RTC_Init(struct tm *dateTime);
 

@@ -1,6 +1,6 @@
-#include "Timer.h"
-#include "LPC2xxx.h"
-#include "LPC2106.h"
+#include "/home/user/Desktop/host-se1/se1/includes/Timer.h"
+#include "/home/user/Desktop/host-se1/se1/includes/LPC2xxx.h"
+#include "/home/user/Desktop/host-se1/se1/includes/LPC2106.h"
 
 /* Iniciação do sistema para permitir o acesso ao periférico Timer 0. O timer
 é iniciado em modo continuo e à frequência indicada no parâmetro frequency. */
