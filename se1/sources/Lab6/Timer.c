@@ -2,8 +2,11 @@
 #include "/home/user/Desktop/host-se1/se1/includes/LPC2xxx.h"
 #include "/home/user/Desktop/host-se1/se1/includes/LPC2106.h"
 
-/* Iniciação do sistema para permitir o acesso ao periférico Timer 0. O timer
-é iniciado em modo continuo e à frequência indicada no parâmetro frequency. */
+/** 
+ * Faz a iniciação do sistema para permitir o acesso ao periférico Timer 0.
+ * O timer deve ser iniciado em modo continuo.
+ * @param frequency Define a frequecia aplicada ao Timer 0
+*/
 void TMR0_Init(unsigned int frequency){
 	if(frequency > LPC2106_PCLK || frequency == 0) return;
 	LPC2106_BASE_TC0.IR= 0x00000000;
@@ -27,19 +30,27 @@ void TMR0_Init(unsigned int frequency){
 	LPC2106_BASE_TC0.TCR= 0x00000001;				//Enable Counter
 }
 
-/* Devolve o valor corrente do Timer 0 em unidades de contagem (ticks). */
+/**
+ * Devolve o valor corrente do Timer 0 em unidades de contagem (ticks). 
+*/
 unsigned int TMR0_GetValue(void){
 	return LPC2106_BASE_TC0.TC;
 }
 
-/* Devolve o valor, em unidades de contagem (ticks), desde o lastRead até o
-tempo corrente. */
+/**
+ * Devolve o valor, em unidades de contagem (ticks), desde o lastRead até o tempo corrente. 
+ * @param lastRead Indica o tempo da ultima leitura.
+ */
 unsigned int TMR0_Elapsed(unsigned int lastRead){
 	 unsigned int now= TMR0_GetValue();
 	 return now-lastRead;
 }
 
-void TMR0_Delay(unsigned t){
+/**
+ * Faz um compaço de espera passado como parametro
+ * @param timer Indica o tempo que deve ser esperado.
+ */
+void TMR0_Delay(unsigned timer){
 	unsigned now = TMR0_GetValue();
 	while(TMR0_Elapsed(now) < t);
 }

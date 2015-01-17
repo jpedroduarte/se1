@@ -12,7 +12,6 @@ char key_idx[] = { 0xFF, 0, 1, 0xFF, 2, 0xFF, 0xFF, 0xFF ,3};
 /* Faz a iniciação do sistema para permitir o acesso ao periférico. Para tal,
 recebe como parâmetro o vetor com os códigos das 16 teclas (layout). */
 void KBD_Init(unsigned int layout[16]){
-	
 	GPIO_config(col_mask, col_mask | line_mask, 0);
 	int i;
 	for(i = 0; i<16; ++i)

@@ -1,8 +1,15 @@
+/** @file LPC2xxx.h
+*  LPC2xxx module header.
+*  Define as estruturas dos modulos da familia LPC2xxx
+*/
 #ifndef LPC2xxx_h
 #define LPC2xxx_h
 
 typedef volatile unsigned int LPC2xxx_REG;
 
+/**
+* Registo existentes para o uso do GPIO
+*/
 typedef struct{
 	LPC2xxx_REG IOPIN;
 	LPC2xxx_REG IOSET;
@@ -10,6 +17,9 @@ typedef struct{
 	LPC2xxx_REG IOCLR;
 } GPIO_DSC;
 
+/**
+* Registo existentes para o uso do RTC
+*/
 typedef struct {
 	/* Miscellaneous Register Group */
 	LPC2xxx_REG ILR, CTC, CCR, CIIR, AMR;
@@ -24,6 +34,9 @@ typedef struct {
 	LPC2xxx_REG PREINT, PREFRAC;
 } LPC210X_RTC;
 
+/**
+* Registo existentes para o uso do TimeCounter
+*/
 typedef struct {
 	LPC2xxx_REG IR;
 	LPC2xxx_REG TCR;
@@ -45,5 +58,24 @@ typedef struct {
 	LPC2xxx_REG CTCR;
 } LPC210X_TC;
 
+/**
+* Registo existentes para a comunicação em I2C
+*/
+typedef struct {
+	LPC2xxx_REG I2CONSET;
+	LPC2xxx_REG I2STAT;
+	LPC2xxx_REG I2DAT;
+	LPC2xxx_REG I2ADR;
+	LPC2xxx_REG I2SCLH;
+	LPC2xxx_REG I2SCLL;
+	LPC2xxx_REG I2CONCLR;
+} LPC210X_I2C;
 
+/**
+* Registo existentes para o PinSelect
+*/
+typedef struct {
+	LPC2xxx_REG PINSEL0;
+	LPC2xxx_REG PINSEL1;
+}LPC210X_PINSEL;
 #endif 
