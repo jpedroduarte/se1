@@ -6,10 +6,16 @@
 #define LPC2xxx_h
 
 typedef volatile unsigned int LPC2xxx_REG;
+/**
+* Declaraçao da funçao para chamar comandos IAP 
+*/
+typedef void (*IAP)(unsigned int [],unsigned int[]);
+IAP iap_entry;
 
 /**
 * Registo existentes para o uso do GPIO
 */
+
 typedef struct{
 	LPC2xxx_REG IOPIN;
 	LPC2xxx_REG IOSET;
