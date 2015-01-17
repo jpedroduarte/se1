@@ -21,16 +21,19 @@ SINIT = $(bspPath)initSam.S
 lpc = lpc2106
 lcd = lcd
 led = led
+but = button
 
 LIBLPC = $(libsPath)lib$(lpc).a
 LIBLCD = $(libsPath)lib$(lcd).a
 LIBLED = $(libsPath)lib$(led).a
+LIBBUTTON = lib$(but).a
 
 ILIBLPC = -L$(libsPath) -l$(lpc)
 ILIBLCD = -L$(libsPath) -l$(lcd)
 ILIBLED = -L$(libsPath) -l$(led)
+ILIBBUT = -L$(libsPath) -l$(but)
 
-IALLLIBS = $(ILIBLCD) $(ILIBLED) $(ILIBLPC) $(LIBC) $(LIBGCC) 
+IALLLIBS = $(ILIBLCD) $(ILIBLED) $(ILIBBUT) $(ILIBLPC) $(LIBC) $(LIBGCC) 
 
 #ARN
 ARM = arm-none-eabi-
@@ -49,23 +52,17 @@ Aas = $(ARM)as
 insight: App.axf
 	$(Ainsight) App.axf
 
-App.axf :  App.o Button.o $(OINIT) TempManagement.o
-	$(Ald) $(OINIT) App.o Button.o TempManagement.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
+App.axf :  App.o Menu.o Manager.o
+	$(Ald) $(OINIT) App.o Menu.o Manager.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
 
 App.o: App.c
 	$(Agcc) -c -g App.c -o App.o	
 
-Button.o: Button.c
-	$(Agcc) -c -g Button.c -o Button.o
+Manager.o: Manager.c
+	$(Agcc) -c -g Manager.c -o Manager.o
 
-$(OINIT): $(SINIT)
-	$(Aas) $(SINIT) -o $(OINIT) -g
-	
-TempManagement.o: TempManagement.c
-	$(Agcc) -c -g TempManagement.c -o TempManagement.o
-
-Manutencao.o: Manutencao.c
-	$(Agcc) -c -g Manutencao.c -o Manutencao.o
+Menu.o: Menu.c
+	$(Agcc) -c -g Menu.c -o Menu.o
 
 clean: 
 	rm *.o *.axf

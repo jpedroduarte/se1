@@ -57,6 +57,8 @@ int main() {
 	return 0;
 }
 
+
+
 void n2str(char * str, int n, int p){
 	*(str + p) = '0'+(n/10);
 	*(str + p + 1) = ('0' +(n%10));

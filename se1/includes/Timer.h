@@ -7,5 +7,7 @@ unsigned int TMR0_GetValue(void);
 
 unsigned int TMR0_Elapsed(unsigned int lastRead);
 
+void TMR0_Delay(unsigned t);
+
 #endif
 
