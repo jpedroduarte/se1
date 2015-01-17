@@ -8,6 +8,7 @@
 /**
 * BASE ADDRESS DEFINITIONS FOR LPC2106
 */
+#define IAP_LOCATION 0x7ffffff1
 #define GPIO_base 0xE0028000 
 #define GPIO (*((GPIO_DSC *)GPIO_base))
 
