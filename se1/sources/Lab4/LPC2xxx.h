@@ -45,5 +45,18 @@ typedef struct {
 	LPC2xxx_REG CTCR;
 } LPC210X_TC;
 
+typedef struct {
+	LPC2xxx_REG I2CONSET;
+	LPC2xxx_REG I2STAT;
+	LPC2xxx_REG I2DAT;
+	LPC2xxx_REG I2ADR;
+	LPC2xxx_REG I2SCLH;
+	LPC2xxx_REG I2SCLL;
+	LPC2xxx_REG I2CONCLR;
+} LPC210X_I2C;
 
+typedef struct {
+	LPC2xxx_REG PINSEL0;
+	LPC2xxx_REG PINSEL1;
+}LPC210X_PINSEL;
 #endif 
