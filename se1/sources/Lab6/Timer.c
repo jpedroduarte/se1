@@ -2,6 +2,7 @@
 #include "/home/user/Desktop/host-se1/se1/includes/LPC2xxx.h"
 #include "/home/user/Desktop/host-se1/se1/includes/LPC2106.h"
 
+static int TMR0_frequency;
 /** 
  * Faz a iniciação do sistema para permitir o acesso ao periférico Timer 0.
  * O timer deve ser iniciado em modo continuo.
@@ -28,6 +29,7 @@ void TMR0_Init(unsigned int frequency){
 	//LPC2106_BASE_TC0.RESERVED[12]; 				/* Dummy */
 	LPC2106_BASE_TC0.CTCR= 0;			            //Counter mode: TC incremented every rising edge
 	LPC2106_BASE_TC0.TCR= 0x00000001;				//Enable Counter
+	TMR0_frequency = frequency;
 }
 
 /**
@@ -50,7 +52,14 @@ unsigned int TMR0_Elapsed(unsigned int lastRead){
  * Faz um compaço de espera passado como parametro
  * @param timer Indica o tempo que deve ser esperado.
  */
-void TMR0_Delay(unsigned timer){
+void TMR0_Delay(unsigned time){
 	unsigned now = TMR0_GetValue();
-	while(TMR0_Elapsed(now) < t);
+	while(TicksToMS(TMR0_Elapsed(now)) < time );
+}
+
+unsigned int TicksToMS(unsigned int ticks){
+	if(TMR0_frequency <= 1000)
+		return ticks;
+	int mili = TMR0_frequency /1000;
+	return ticks / mili;
 }

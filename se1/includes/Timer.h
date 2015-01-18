@@ -25,7 +25,9 @@ unsigned int TMR0_GetValue(void);
  */
 unsigned int TMR0_Elapsed(unsigned int lastRead);
 
-void TMR0_Delay(unsigned t);
+void TMR0_Delay(unsigned time);
+
+unsigned int TicksToMS(unsigned int ticks);
 
 #endif
 

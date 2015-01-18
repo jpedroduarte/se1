@@ -106,5 +106,7 @@ libBut: $(OBUTTON)
 	$(Aar) -rcs $(LIBBUTTON) $(OBUTTON)
 
 clean:
-	rm *.o *.a
-	
+	rm $(o)*.o *.a
+
+all: clean libLpc libLcd libLed libBut
+	ls *.a
