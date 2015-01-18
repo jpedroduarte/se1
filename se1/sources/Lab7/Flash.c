@@ -73,6 +73,8 @@ unsigned int FLASH_VerifyData(void *dstAddr, void *srcAddr, unsigned int size){
 	command[2]= (unsigned int)srcAddr;
 	command[3]= size;
 	iap_entry(command,result);
+	if(result[0]== COMPARE_ERROR)return result[0];
+	return 0;
 }
 
 
