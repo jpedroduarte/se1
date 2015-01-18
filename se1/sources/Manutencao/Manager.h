@@ -1,4 +1,9 @@
+#ifndef MANAGER_H_
+#define MANAGER_H_
+
+#include "/home/user/Desktop/host-se1/se1/includes/ValueTypes.h"
 #include "Menu.h"
+#include "/home/user/Desktop/host-se1/se1/includes/lcd.h"
 
 #define L0 0
 #define L1 1
@@ -13,6 +18,7 @@ typedef struct entryMode{
 	int on;
 	Seter vals[3];
 	ManType mType;
+	
 }EntryMode;
 
 typedef struct ManagerInfo{
@@ -107,3 +113,5 @@ int Manager_EntryY(EntryMode e);
  * */
 void Manager_LogMode(EntryMode e);
 //void Manager_ExitMode(EntryMode e);
+
+#endif

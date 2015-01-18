@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "Manager.h"
-#include "/home/user/Desktop/host-se1/se1/includes/lcd.h"
 
 void Manager_Print(Menu *m){
 	int curr = MENU_getCurr(m) -1;
