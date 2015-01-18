@@ -42,7 +42,6 @@ void Manager_Enter(EntryMode e){
 	//	int y = Manager_EntryY(e);
 	switch(mT){
 		case SET:
-			
 			LCD_Goto(x,y);
 			TMR0_Delay(5000);
 			break;

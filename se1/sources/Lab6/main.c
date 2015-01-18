@@ -6,7 +6,6 @@ void n2str(char * str, int n, int p);
 void putYear(char * str, int n, int p);
 
 int main() {
-	///*
 	struct tm *dateTime = {0};
 	dateTime->tm_sec	= 0;
 	dateTime->tm_min	= 49;
@@ -16,7 +15,7 @@ int main() {
 	dateTime->tm_year = 2015;
 	
 	RTC_Init(dateTime);
-	TMR0_Init(1000);
+	TMR0_Init(100000);
 	LCD_Init();
 	LED_Init(15,0);
 	
@@ -69,7 +68,6 @@ void putYear(char * str, int n, int p){
 	*(str + p +1) = '0'+((n%1000)/100);
 	*(str + p + 2) = '0'+(((n%1000)%100)/10);
 	*(str + p + 3) = ('0' +(n%10));
-	
 }
 
 

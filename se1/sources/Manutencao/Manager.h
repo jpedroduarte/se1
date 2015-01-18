@@ -9,23 +9,6 @@ typedef enum managementType{
 	EXIT
 }ManType;
 
-typedef struct SetPos{
-	int x;
-	int y;
-	int size;
-}SetPos;
-
-typedef struct SetVal{
-	int min;
-	int max;
-	int curr;
-}SetVal;
-
-typedef struct Seter{
-	SetPos pos;
-    SetVal val;
-}Seter;
-
 typedef struct entryMode{
 	int on;
 	Seter vals[3];
