@@ -24,15 +24,15 @@ void write_Byte(int rs, int data);
 */
 void LCD_Init(void);
 
-/** 
-* Escreve um carácter na posição corrente do cursor. 
-* @param ch Char que será escrito
-*/
+/**
+ * Escreve um carácter na posição corrente do cursor
+ * @param ch caracter que se pretende escrever
+ */
 void LCD_WriteChar(char ch);
 
 /**
-* Escreve uma string na posição corrente do cursor. 
-* @param str String que será escrita
+ * Escreve uma string na posição corrente do cursor
+ * @param str string que se pretende escrever
 */
 void LCD_WriteString(char *str);
 
@@ -47,5 +47,15 @@ void LCD_Goto(int x, int y);
 * Limpa o visor, usando o comando disponível na API do periférico. 
 */
 void LCD_Clear(void);
+
+/**
+ * Liga o LDC
+ */
+void LCD_On(void);
+
+/**
+ * Desliga o LDC
+ */
+void LCD_Off(void);
 
 #endif
