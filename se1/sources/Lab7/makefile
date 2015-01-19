@@ -1,5 +1,5 @@
 LIBGCC = /usr/local/arm-tools/arm-2009q1/lib/gcc/arm-none-eabi/4.3.3/libgcc.a
-LDSCRIPT = /mnt/hgfs/hostbox/se1/se1/bsp/ldscript_ram
+LDSCRIPT = /mnt/hgfs/host-se1/se1/bsp/ldscript_ram
 
 insight: Lab7.axf
 	arm-none-eabi-insight Lab7.axf

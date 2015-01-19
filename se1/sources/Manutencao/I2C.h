@@ -4,6 +4,7 @@
 #ifndef _I2C_H_
 #define _I2C_H_
 
+#include <string.h>
 /**
 * Faz a iniciação do sistema para permitir o acesso ao controlador I2C. 
 */

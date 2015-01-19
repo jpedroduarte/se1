@@ -4,9 +4,9 @@ unsigned int command[5];
 unsigned int result[3];
 IAP iap_entry = (IAP) IAP_LOCATION;
 
-static unsigned int getSectorNumberFromAddr(void * Addr){
+static unsigned int getSectorNumberFromAddr(void* Addr){
 	unsigned int addr= (unsigned int) Addr;
-	addr=(addr>>16)/2;
+	addr=(addr>>12)/2;
 	return addr;
 }
 

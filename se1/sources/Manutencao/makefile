@@ -52,8 +52,8 @@ Aas = $(ARM)as
 insight: App.axf
 	$(Ainsight) App.axf
 
-App.axf :  App.o Menu.o Manager.o
-	$(Ald) $(OINIT) App.o Menu.o Manager.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
+App.axf :  App.o Menu.o Manager.o I2C.o
+	$(Ald) $(OINIT) App.o Menu.o Manager.o I2C.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
 
 App.o: App.c
 	$(Agcc) -c -g App.c -o App.o	
@@ -63,6 +63,9 @@ Manager.o: Manager.c
 
 Menu.o: Menu.c
 	$(Agcc) -c -g Menu.c -o Menu.o
+	
+I2C.o: I2C.c
+	$(Agcc) -c -g I2C.c -o I2C.o
 
 clean: 
 	rm *.o *.axf

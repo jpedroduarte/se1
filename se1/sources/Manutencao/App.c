@@ -1,7 +1,11 @@
 #include "/home/user/Desktop/host-se1/se1/includes/Button.h"
 #include "Menu.h"
+#include "/home/user/Desktop/host-se1/se1/sources/Lab7/LPC2xxx.h"
+
+
 
 int main(){
+
 	TMR0_Init(1000);
 	LCD_Init();
 	navSubMenu sbm = {
@@ -52,7 +56,7 @@ int main(){
 				if((pButs)->currentState == just_released)
 					break;
 			}
-			if(Manager_Entry(pm))
+			if(Manager_Entry(pm, pButs,3))
 				break;
 		}
 		
@@ -79,5 +83,7 @@ int main(){
 	}
 	LCD_Clear();
 	LCD_WriteString("MODO NORMAL");
-	while(1);	
+	while(1);
 }
+
+
