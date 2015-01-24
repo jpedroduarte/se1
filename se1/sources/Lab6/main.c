@@ -8,9 +8,9 @@ void putYear(char * str, int n, int p);
 int main() {
 	struct tm *dateTime = {0};
 	dateTime->tm_sec	= 0;
-	dateTime->tm_min	= 49;
-	dateTime->tm_hour = 15;
-	dateTime->tm_mday = 13;
+	dateTime->tm_min	= 20;
+	dateTime->tm_hour = 12;
+	dateTime->tm_mday = 23;
 	dateTime->tm_mon	= 1;
 	dateTime->tm_year = 2015;
 	
