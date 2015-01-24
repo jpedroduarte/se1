@@ -18,7 +18,7 @@ int main() {
 	timeptr->tm_hour = 14;
 	timeptr->tm_mday = 16;
 	timeptr->tm_mon	= 0;
-	timeptr->tm_year = 2015-1900;
+	timeptr->tm_year = 2015;
 	timeptr->tm_yday = 16;
 	timeptr->tm_wday = 5;
 	localtime(timeptr);

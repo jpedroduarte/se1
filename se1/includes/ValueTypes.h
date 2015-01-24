@@ -1,9 +1,9 @@
 #ifndef VALUETYPES_h
 #define VALUETYPES_h_h
 
-typedef enum valType{
-	TEMP =  3, MM = 2  , YEAR = 4
-}ValType;
+#define TEMP 3
+#define MM 2
+#define YEAR 4
 
 typedef struct SetPos{
 	int x;
