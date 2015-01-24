@@ -4,7 +4,7 @@
 
 #include "/home/user/Desktop/host-se1/se1/includes/Button.h"
 #include "/home/user/Desktop/host-se1/se1/includes/TempManagement.h"
-#include "/home/user/Desktop/host-se1/se1/includes/Manutencao.h"
+#include "/home/user/Desktop/host-se1/se1/includes/ValueTypes.h"
 
 int _sbrk()
 {
@@ -128,4 +128,38 @@ int main() {
 		*/
 	}
 
+}
+
+
+void showInfo(){
+	char *hour = "00:00";
+	char *date = "00-00-0000";
+	
+	struct tm *dateTime = {0};
+	RTC_GetValue(dateTime);
+	n2str(date, dateTime->tm_mday & 0x1F, 0);
+	n2str(date, dateTime->tm_mon & 0x0F, 3);
+	putYear(date, dateTime->tm_year, 6);
+	n2str(hour, dateTime->tm_hour & 0x3F, 0);
+	n2str(hour, dateTime->tm_min & 0x3F, 3);
+	
+	Seter temps = {0};
+	temps->val = 
+	
+	LCD_On();
+	LCD_WriteString("Max:"); 
+	LCD_WriteString();// temp max
+	LCD_WriteChar(' ');
+	LCD_WriteString("Min:"); 
+	LCD_WriteString();// temp min
+	LCD_Goto(1,0);
+	LCD_WriteString(date);
+	LCD_WriteChar(' ');
+	LCD_WriteString(hour);
+	TMR0_Delay(5);
+	LCD_Off();
+}
+
+void saveData(){
+	Fla
 }
