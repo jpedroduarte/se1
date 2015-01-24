@@ -3,7 +3,7 @@
 */
 #include "I2C.h"
 #include "/home/user/Desktop/host-se1/se1/includes/GPIO.h"
-#include "/home/user/Desktop/host-se1/se1/includes/LPC210x.h"
+#include "/home/user/Desktop/host-se1/se1/includes/LPC2xxx.h"
 #include "/home/user/Desktop/host-se1/se1/includes/LPC2106.h"
 
 /** 
@@ -65,9 +65,13 @@ void I2C_Init(void){
 unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int size, int freq){
 
 	unsigned int SCL;
+	
 	unsigned char status;
+	
 	void *inicialAddr = data;
-	void *finalAddr = ((char*)data + size * sizeof(char));
+	
+	void *finalAddress = ((char*)data + size * sizeof(char));
+	
 	SCL = ((LPC2106_MAIN_OSC)/freq)/2; 
 	I2C_Start(SCL);
 	while(1){
@@ -85,7 +89,7 @@ unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int
 					I2C_Read(data);
 					data = ((char *)data) + sizeof(char);
 					if(data == finalAddress){ //last byte.
-						status = I2C.I2STAT;
+						status = LPC2106_I2C.I2STAT;
 						LPC2106_I2C.I2CONCLR = I2C_AA_FLAG | I2C_SI_FLAG;
 						LPC2106_I2C.I2CONCLR = I2C_SI_FLAG;
 						I2C_Stop();
@@ -156,7 +160,7 @@ void setSlaveAddr(unsigned char addr, int read){
 * Faz a escrita para o periférico
 */
 void I2C_Write(void *data){
-	memcpy(data, (void*)&I2DAT, sizeof(char));
+	memcpy(data, (void*)&LPC2106_I2C.I2DAT, sizeof(char));
 	LPC2106_I2C.I2CONCLR = I2C_SI_FLAG;
 }
 
@@ -164,7 +168,7 @@ void I2C_Write(void *data){
 * Faz a leitura da data devolovida pelo periférico
 */
 void I2C_Read(void *data){
-	memcpy((void*)&I2DAT, data, sizeof(char));
+	memcpy((void*)&LPC2106_I2C.I2DAT, data, sizeof(char));
 	LPC2106_I2C.I2CONCLR = I2C_SI_FLAG;
 }
 

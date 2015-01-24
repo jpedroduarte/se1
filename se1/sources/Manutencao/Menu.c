@@ -1,5 +1,6 @@
 #include "Menu.h"
 
+
 void MENU_Navigation(Menu *m, nav n){
 	int curr = MENU_getCurr(m);
 	int last = MENU_getLast(m);

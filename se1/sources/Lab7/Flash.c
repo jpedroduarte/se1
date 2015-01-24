@@ -4,9 +4,9 @@ unsigned int command[5];
 unsigned int result[3];
 IAP iap_entry = (IAP) IAP_LOCATION;
 
-static unsigned int getSectorNumberFromAddr(void * Addr){
+static unsigned int getSectorNumberFromAddr(void* Addr){
 	unsigned int addr= (unsigned int) Addr;
-	addr=(addr>>16)/2;
+	addr=(addr>>12)/2;
 	return addr;
 }
 
@@ -73,6 +73,8 @@ unsigned int FLASH_VerifyData(void *dstAddr, void *srcAddr, unsigned int size){
 	command[2]= (unsigned int)srcAddr;
 	command[3]= size;
 	iap_entry(command,result);
+	if(result[0]== COMPARE_ERROR)return result[0];
+	return 0;
 }
 
 
