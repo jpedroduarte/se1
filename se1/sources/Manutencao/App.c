@@ -19,17 +19,19 @@ Button *pButs;
 Button *pUD;
 unsigned mod;
 
-struct tm *dateTime;
+struct tm *pDateTime;
 unsigned lastHour;
 
 int main(){
-	dateTime = {0};
-	dateTime->tm_sec = 0;
-	dateTime->tm_min = 20;
-	dateTime->tm_hour = 12;
-	dateTime->tm_mday = 23;
-	dateTime->tm_mon = 1;
-	dateTime->tm_year = 2015;
+	struct tm dateTime = {0};
+	dateTime.tm_sec = 0;
+	dateTime.tm_min = 20;
+	dateTime.tm_hour = 12;
+	dateTime.tm_mday = 23;
+	dateTime.tm_mon = 1;
+	dateTime.tm_year = 2015;
+	
+	pDateTime = &(dateTime);
 	
 	RTC_Init(dateTime);
 	
@@ -169,9 +171,9 @@ void Show(){
 }
 
 void Register(){
-	RTC_GetValue(dateTime);
-	if(lastHour != dateTime->tm_hour){
-		lastHour = dateTime->tm_hour;
+	RTC_GetValue(pDateTime);
+	if(lastHour != pDateTime->tm_hour){
+		lastHour = pDateTime->tm_hour;
 		LCD_On();
 		LCD_Clear();
 		LCD_WriteString("REGISTER");
