@@ -23,45 +23,14 @@ struct tm *pDateTime;
 unsigned lastHour;
 
 int main(){
-	struct tm dateTime = {0};
-	dateTime.tm_sec = 0;
-	dateTime.tm_min = 20;
-	dateTime.tm_hour = 12;
-	dateTime.tm_mday = 23;
-	dateTime.tm_mon = 1;
-	dateTime.tm_year = 2015;
-	
-	pDateTime = &(dateTime);
-	
-	RTC_Init(dateTime);
-	
-	TMR0_Init(100000);
-	LCD_Init();
-	
-	navSubMenu sbm = {
-		1,
-		1,
-		6
-	};
-	
-	Menu m = {sbm};
-	pm = &m;
-	
-	Button bUp =  Button_Init(0);
-	Button bDown =  Button_Init(1);
-	Button bOk =  Button_Init(4);
-	Button bUpDown[2] = { bUp, bDown};
-	Button allBut[3] = {
-		bOk,
-		bUp,
-		bDown		
-	};		
-	pButs = allBut;
-	pUD = bUpDown;
-	mod = APP;
+	Init();
+
 	LCD_WriteString("MODO NORMAL");
+	RTC_
 	while(1){
 		
+
+		// falta comunicar com o I2C de hora a hora e colocar na flash
 		if(mod == APP && Button_PressedMoreThan(bUpDown,2000,2) ==1){
 			mod = MANAGER;
 		}
@@ -80,6 +49,49 @@ int main(){
 		}
 		Execute();
 	}
+}
+void Init(){
+	// ir buscar o tempo currente
+	//time_t result = time(NULL); 
+	//struct tm dateTime = localtime(&result);
+	//printf("%s", asctime(localtime(&result)));
+	
+	struct tm dateTime = { 0 };
+	dateTime.tm_sec = 0;
+	dateTime.tm_min = 20;
+	dateTime.tm_hour = 12;
+	dateTime.tm_mday = 23;
+	dateTime.tm_mon = 1;
+	dateTime.tm_year = 2015;
+
+	pDateTime = &(dateTime);
+
+	RTC_Init(dateTime);
+	TMR0_Init(100000);
+	LCD_Init();
+	I2C_Init();
+	navSubMenu sbm = {
+		1,
+		1,
+		6
+	};
+
+	Menu m = { sbm };
+	pm = &m;
+
+	Button bUp = Button_Init(0);
+	Button bDown = Button_Init(1);
+	Button bOk = Button_Init(4);
+	Button bUpDown[2] = { bUp, bDown };
+	Button allBut[3] = {
+		bOk,
+		bUp,
+		bDown
+	};
+	pButs = allBut;
+	pUD = bUpDown;
+	mod = APP;
+
 }
 
 void Execute(){
@@ -155,13 +167,24 @@ void Manutencao(){
 void Show(){
 	char *hour = "00:00";
 	char *date = "00-00-0000";
+
+	struct tm *dateTime = { 0 };
+	RTC_GetValue(dateTime);
+	n2str(date, dateTime->tm_mday & 0x1F, 0);
+	n2str(date, dateTime->tm_mon & 0x0F, 3);
+	putYear(date, dateTime->tm_year, 6);
+	n2str(hour, dateTime->tm_hour & 0x3F, 0);
+	n2str(hour, dateTime->tm_min & 0x3F, 3);
+	
 	LCD_Clear();
 	LCD_On();
 	LCD_WriteString("Max:"); 
-	LCD_WriteString("20");// temp max
+	unsigned int max = I2C_Tranfer(0x00, 0, 0xA1, 2, 100000); // temp max
+	LCD_WriteString(""+max);
 	LCD_WriteChar(' ');
 	LCD_WriteString("Min:"); 
-	LCD_WriteString("10");// temp min
+	unsigned int min = I2C_Tranfer(0x00, 0, 0xA2, 2, 100000); // temp min
+	LCD_WriteString(""+min);
 	LCD_Goto(1,0);
 	LCD_WriteString(date);
 	LCD_WriteChar(' ');
@@ -179,6 +202,8 @@ void Register(){
 		LCD_WriteString("REGISTER");
 		LCD_Off();
 	
+		unsigned int temp = I2C_Tranfer(0x00, 0, 0x AA, 2, 100000); //temp actual
+
 	}
 	
 }
