@@ -26,7 +26,6 @@ int main(){
 	Init();
 
 	LCD_WriteString("MODO NORMAL");
-	RTC_
 	while(1){
 		
 
