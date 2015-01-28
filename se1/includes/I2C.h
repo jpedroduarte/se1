@@ -4,6 +4,10 @@
 #ifndef _I2C_H_
 #define _I2C_H_
 
+#include <string.h>
+
+
+#define I2C_FREQ 100000
 /**
 * Faz a iniciação do sistema para permitir o acesso ao controlador I2C. 
 */
@@ -21,5 +25,12 @@ void I2C_Init(void);
 * @return Correspondem aos valores do registo I2CSTAT do controlador I2C.
 */
 unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int size, int freq);
+
+void I2C_Read(void *data);
+void I2C_Write(void *data);
+void setSlaveAddr(unsigned char addr, int read);
+void I2C_Stop();
+void I2C_Start(int scl);
+
 
 #endif

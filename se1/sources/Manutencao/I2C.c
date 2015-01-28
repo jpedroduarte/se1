@@ -1,7 +1,7 @@
 /** @file I2C.c
 *  I2C module .
 */
-#include "I2C.h"
+#include "/home/user/Desktop/host-se1/se1/includes/I2C.h"
 #include "/home/user/Desktop/host-se1/se1/includes/GPIO.h"
 #include "/home/user/Desktop/host-se1/se1/includes/LPC2xxx.h"
 #include "/home/user/Desktop/host-se1/se1/includes/LPC2106.h"
@@ -63,7 +63,7 @@ void I2C_Init(void){
 * @return Correspondem aos valores do registo I2CSTAT do controlador I2C.
 */
 unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int size, int freq){
-
+	unsigned res,res2;
 	unsigned int SCL;
 	
 	unsigned char status;
@@ -72,10 +72,12 @@ unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int
 	
 	void *finalAddress = ((char*)data + size * sizeof(char));
 	
-	SCL = ((LPC2106_MAIN_OSC)/freq)/2; 
+	SCL = ((LPC2106_PCLK)/freq)/2; 
 	I2C_Start(SCL);
 	while(1){
+		res= LPC2106_I2C.I2CONSET;
 		if((LPC2106_I2C.I2CONSET & I2C_SI_FLAG) == I2C_SI_FLAG){
+			res2 = LPC2106_I2C.I2STAT;
 			switch(LPC2106_I2C.I2STAT){
 				case I2C_STATE_START:
 				case I2C_STATE_REPEAT_START:
@@ -127,6 +129,10 @@ unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int
 					return status;
 			}	
 		}
+		else{
+			int i =0;
+		}
+		
 	}
 }
 
@@ -138,7 +144,7 @@ void I2C_Start(int scl){
 	LPC2106_I2C.I2SCLH = scl;
 	LPC2106_I2C.I2SCLL = scl;
 	LPC2106_I2C.I2CONCLR = I2C_CLEAR_ALL_FLAGS;
-	LPC2106_I2C.I2CONSET = I2C_STA_FLAG | I2C_I2EN_FLAG;
+	LPC2106_I2C.I2CONSET = I2C_I2EN_FLAG | I2C_STA_FLAG;
 }
 
 /**
@@ -153,7 +159,7 @@ void I2C_Stop(){
 * Afecta o endereço do periferico que se pretende comunicar
 */
 void setSlaveAddr(unsigned char addr, int read){
-	LPC2106_I2C.I2DAT = (addr<<1) || (read & 1);
+	LPC2106_I2C.I2DAT = (addr) | (read & 1);
 }
 
 /**
