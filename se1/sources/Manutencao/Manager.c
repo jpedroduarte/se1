@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "Manager.h"
+#include "/home/user/Desktop/host-se1/se1/includes/Manager.h"
 
 static int currMenu;
 
@@ -56,18 +56,6 @@ void Manager_Enter(EntryMode *e, Button *buts, int nButs){
 		default:
 			break;
 	}
-}
-
-void n2str(char *str, int n, int p){
-	*(str + p) = '0'+(n/10);
-	*(str + p + 1) = ('0' +(n%10));
-}
-
-void year2str(char *str, int n, int p){
-	*(str + p) = '0'+(n/1000);
-	*(str + p +1) = '0'+((n%1000)/100);
-	*(str + p + 2) = '0'+(((n%1000)%100)/10);
-	*(str + p + 3) = ('0' +(n%10));
 }
 
 void temp2str(char *str, int n, int p){

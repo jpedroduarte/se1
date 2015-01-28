@@ -1,21 +1,28 @@
 #ifndef MENU_H
 #define MENU_H
 
-typedef struct SubMenu{
-	char *L1;
-	char *L2;
-}SubMenu;
+typedef struct navSubMenu{
+	int curr;
+	int first;
+	int last;
+}navSubMenu;
 
-typedef struct menu{
-	int totalSubMenu;
-	int currSubMenu;
-	SubMenu subMenus[];
+typedef enum nav{
+	UP = 1,
+	DOWN = -1,
+	OK = 0
+} nav; 
+
+typedef struct Menu{
+	navSubMenu sbm;
 } Menu;
 
-typedef enum {UP=1,DOWN=-1, OK = 0} SubMenuNav;
+void MENU_setCurr(Menu *m, int curr);
+int MENU_getCurr(Menu *m);
 
-Menu Menu_Create(int totalSubMenu, SubMenu subMenus[]);
-void Menu_changeSubMenu(Menu m, SubMenuNav s);
-int Menu_IsChangeable(Menu m, SubMenuNav s);
+int MENU_getFirst(Menu *m);
+int MENU_getLast(Menu *m);
+
+void MENU_Navigation(Menu *m, nav op);
 
 #endif

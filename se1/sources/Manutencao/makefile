@@ -22,18 +22,15 @@ lpc = lpc2106
 lcd = lcd
 led = led
 but = button
+val = valtypes
 
-LIBLPC = $(libsPath)lib$(lpc).a
-LIBLCD = $(libsPath)lib$(lcd).a
-LIBLED = $(libsPath)lib$(led).a
-LIBBUTTON = lib$(but).a
+ILIBLPC  = -L$(libsPath) -l$(lpc)
+ILIBLCD  = -L$(libsPath) -l$(lcd)
+ILIBLED  = -L$(libsPath) -l$(led)
+ILIBBUT  = -L$(libsPath) -l$(but)
+ILIBVALS = -L$(libsPath) -l$(val)
 
-ILIBLPC = -L$(libsPath) -l$(lpc)
-ILIBLCD = -L$(libsPath) -l$(lcd)
-ILIBLED = -L$(libsPath) -l$(led)
-ILIBBUT = -L$(libsPath) -l$(but)
-
-IALLLIBS = $(ILIBLCD) $(ILIBLED) $(ILIBBUT) $(ILIBLPC) $(LIBC) $(LIBGCC) 
+IALLLIBS = $(ILIBLCD) $(ILIBLED) $(ILIBBUT) $(ILIBLPC) $(ILIBVALS) $(LIBC) $(LIBGCC) 
 
 #ARN
 ARM = arm-none-eabi-
@@ -52,8 +49,8 @@ Aas = $(ARM)as
 insight: App.axf
 	$(Ainsight) App.axf
 
-App.axf :  App.o Menu.o Manager.o I2C.o
-	$(Ald) $(OINIT) App.o Menu.o Manager.o I2C.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
+App.axf :  App.o Menu.o Manager.o I2C.o log.o
+	$(Ald) $(OINIT) App.o Menu.o Manager.o I2C.o log.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
 
 App.o: App.c
 	$(Agcc) -c -g App.c -o App.o	
@@ -67,5 +64,8 @@ Menu.o: Menu.c
 I2C.o: I2C.c
 	$(Agcc) -c -g I2C.c -o I2C.o
 
+log.o: log.c
+	$(Agcc) -c -g log.c -o log.o
+	
 clean: 
 	rm *.o *.axf

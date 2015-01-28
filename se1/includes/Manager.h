@@ -2,7 +2,7 @@
 #define MANAGER_H_
 
 #include "/home/user/Desktop/host-se1/se1/includes/ValueTypes.h"
-#include "Menu.h"
+#include "/home/user/Desktop/host-se1/se1/includes/Menu.h"
 #include "/home/user/Desktop/host-se1/se1/includes/lcd.h"
 #include "/home/user/Desktop/host-se1/se1/includes/Button.h"
 
@@ -72,7 +72,7 @@ MenuInfo menus = {
 		 *  MM       1 -  12
 		 *  AAAA  2014 - X
 		 * */
-		{"4 - Calendario "    , "      00-00-0000" , {0, {{1, 7, MM, 1, 31, 24},{1, 10, MM, 1, 12, 1},{1,15,YEAR,1900,2500}} , 3, SET} },
+		{"4 - Calendario "    , "      00-00-0000" , {0, {{1, 7, MM, 1, 31, 24},{1, 10, MM, 1, 12, 1},{1,15,YEAR,1900,2500,2015}} , 3, SET} },
 		/** MENU 5 
 		 * 
 		 *  Visualizar o registo de temperaturas

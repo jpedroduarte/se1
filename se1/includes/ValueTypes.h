@@ -1,5 +1,5 @@
 #ifndef VALUETYPES_h
-#define VALUETYPES_h_h
+#define VALUETYPES_h
 
 #define TEMP 3
 #define MM 2
@@ -21,5 +21,10 @@ typedef struct Seter{
 	SetPos pos;
     SetVal val;
 }Seter;
+
+void n2str(char *str, int n, int p);
+
+void year2str(char *str, int n, int p);
+
 
 #endif

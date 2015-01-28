@@ -20,8 +20,8 @@ void RTC_Init(struct tm *dateTime){
 	LPC2106_BASE_RTC.DOM=	dateTime->tm_mday;
 	LPC2106_BASE_RTC.DOW=	dateTime->tm_wday;
 	LPC2106_BASE_RTC.DOY=	dateTime->tm_yday;
-	LPC2106_BASE_RTC.MONTH=	dateTime->tm_mon;
-	LPC2106_BASE_RTC.YEAR=	dateTime->tm_year;
+	LPC2106_BASE_RTC.MONTH=	dateTime->tm_mon+1;
+	LPC2106_BASE_RTC.YEAR=	dateTime->tm_year+1900;
 	
 	//LPC2106_BASE_RTC.RESERVED[8];		//Dummy
 	

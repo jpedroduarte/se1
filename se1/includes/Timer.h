@@ -5,6 +5,7 @@
 #ifndef _TIMER_H_
 #define _TIMER_H_
 
+#include <time.h>
 /** 
  * Faz a iniciação do sistema para permitir o acesso ao periférico Timer 0.
  * O timer deve ser iniciado em modo continuo.

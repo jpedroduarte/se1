@@ -1,8 +1,9 @@
 #include "/home/user/Desktop/host-se1/se1/includes/Button.h"
 #include "/home/user/Desktop/host-se1/se1/includes/I2C.h"
-#include "Menu.h"
-#include "/home/user/Desktop/host-se1/se1/sources/Lab7/LPC2xxx.h"
-
+#include "/home/user/Desktop/host-se1/se1/includes/LPC2xxx.h"
+#include "/home/user/Desktop/host-se1/se1/includes/Menu.h"
+#include "/home/user/Desktop/host-se1/se1/includes/ValueTypes.h"
+#include "/home/user/Desktop/host-se1/se1/includes/log.h"
 
 #include <time.h>
 
@@ -32,6 +33,22 @@ Button bUpDown[2];
 
 int main(){
 	Init();
+	TempReg log[5] = {0};
+	TempReg *pLog = log;
+	int i=0;
+	RTC_GetValue(pDateTime);
+	while(i<5){
+		LOG_RegistDataTemp(pLog+i,pDateTime,i);
+		pDateTime->tm_hour +=1;
+		i++;
+	}
+	i=0;
+	while(i<5){
+		LOG_ShowRegist(pLog+i);
+		TMR0_Delay(3000);
+		i++;
+	}
+	while(1);
 	RTC_GetValue(pDateTime);
 	//LCD_WriteString("MODO NORMAL");
 	while(1){
@@ -66,11 +83,11 @@ void Init(){
 	//printf("%s", asctime(localtime(&result)));
 	
 	dateTime.tm_sec = 0;
-	dateTime.tm_min = 20;
-	dateTime.tm_hour = 12;
-	dateTime.tm_mday = 23;
-	dateTime.tm_mon = 1;
-	dateTime.tm_year = 2015;
+	dateTime.tm_min = 05;
+	dateTime.tm_hour = 13;
+	dateTime.tm_mday = 28;
+	dateTime.tm_mon = 0;
+	dateTime.tm_year = 2015-1900;
 
 	pDateTime = &(dateTime);
 

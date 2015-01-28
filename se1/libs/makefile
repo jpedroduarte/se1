@@ -24,37 +24,41 @@ OLED    = $(o)led.o
 ORTC    = $(o)rtc.o
 OTIMER  = $(o)timer.o
 OBUTTON = $(o)button.o
+OVALS   = $(o)vals.o
 
 #LIBS
 lpc = lpc2106
 lcd = lcd
 led = led
 but = button
+val = valtypes
 
 LIBLPC    = lib$(lpc).a
 LIBLCD    = lib$(lcd).a
 LIBLED    = lib$(led).a
 LIBBUTTON = lib$(but).a 
+LIBVALS   = lib$(val).a
 
-ILIBLPC = -L$(libsPath) -l$(lpc)
-ILIBLCD = -L$(libsPath) -l$(lcd)
-ILIBLED = -L$(libsPath) -l$(led)
-ILIBBUT = -L$(libsPath) -l$(but)
+ILIBLPC  = -L$(libsPath) -l$(lpc)
+ILIBLCD  = -L$(libsPath) -l$(lcd)
+ILIBLED  = -L$(libsPath) -l$(led)
+ILIBBUT  = -L$(libsPath) -l$(but)
+ILIBVALS = -L$(libsPath) -l$(val)
 
-IALLLIBS = $(ILIBLCD) $(ILIBLED) $(ILIBBUT) $(ILIBLPC)
+IALLLIBS = $(ILIBLCD) $(ILIBLED) $(ILIBBUT) $(ILIBLPC) $(ILIBVALS)
 
 #SOURCES
 Lab6 = $(srcPath)Lab6/
-App = $(srcPath)App/
+App  = $(srcPath)App/
+Man  = $(srcPath)Manutencao/
 
-
-CGPIO   = $(Lab6)gpio.c
-CLCD    = $(Lab6)lcd.c
-CLED    = $(Lab6)led.c
-CRTC    = $(Lab6)rtc.c
-CTIMER  = $(Lab6)timer.c
+CGPIO    = $(Lab6)gpio.c
+CLCD     = $(Lab6)lcd.c
+CLED     = $(Lab6)led.c
+CRTC     = $(Lab6)rtc.c
+CTIMER   = $(Lab6)timer.c
 CBUTTON  = $(App)button.c
-
+CVALS    = $(Man)ValueTypes.c
 
 #ARN
 ARM = arm-none-eabi-
@@ -92,6 +96,9 @@ $(OTIMER): $(CTIMER)
 	
 $(OBUTTON): $(CBUTTON)
 	$(Agcc) -c -g $(CBUTTON) -o $(OBUTTON)
+	
+$(OVALS): $(CVALS)
+	$(Agcc) -c -g $(CVALS) -o $(OVALS)
 
 libLpc:  $(OTIMER) $(ORTC) $(OGPIO)
 	$(Aar) -rcs $(LIBLPC) $(OTIMER) $(ORTC) $(OGPIO)
@@ -105,8 +112,11 @@ libLed: $(OLED)
 libBut: $(OBUTTON)
 	$(Aar) -rcs $(LIBBUTTON) $(OBUTTON)
 
+libVal: $(OVALS)
+	$(Aar) -rcs $(LIBVALS) $(OVALS)
+
 clean:
 	rm $(o)*.o *.a
 
-all: clean libLpc libLcd libLed libBut
+all: clean libLpc libLcd libLed libBut libVal
 	ls *.a
