@@ -4,6 +4,7 @@
 #include "/home/user/Desktop/host-se1/se1/includes/Menu.h"
 #include "/home/user/Desktop/host-se1/se1/includes/ValueTypes.h"
 #include "/home/user/Desktop/host-se1/se1/includes/log.h"
+#include "/home/user/Desktop/host-se1/se1/includes/thermometer.h"
 
 #include <time.h>
 
@@ -37,6 +38,14 @@ int main(){
 	TempReg *pLog = log;
 	int i=0;
 	RTC_GetValue(pDateTime);
+	
+	while(1){
+		unsigned int t = getActualTemperature();
+		char* str = "00000000000";
+		str = convertTemperature(str,0,0x42D8);
+		LCD_WriteString(str);
+	}
+	//LOG
 	while(i<5){
 		LOG_RegistDataTemp(pLog+i,pDateTime,i);
 		pDateTime->tm_hour +=1;
@@ -49,6 +58,8 @@ int main(){
 		i++;
 	}
 	while(1);
+	//FIM LOg
+	
 	RTC_GetValue(pDateTime);
 	//LCD_WriteString("MODO NORMAL");
 	while(1){

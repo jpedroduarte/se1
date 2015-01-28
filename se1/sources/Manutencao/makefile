@@ -49,8 +49,8 @@ Aas = $(ARM)as
 insight: App.axf
 	$(Ainsight) App.axf
 
-App.axf :  App.o Menu.o Manager.o I2C.o log.o
-	$(Ald) $(OINIT) App.o Menu.o Manager.o I2C.o log.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
+App.axf :  App.o Menu.o Manager.o I2C.o log.o thermometer.o
+	$(Ald) $(OINIT) App.o Menu.o Manager.o I2C.o log.o thermometer.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
 
 App.o: App.c
 	$(Agcc) -c -g App.c -o App.o	
@@ -66,6 +66,8 @@ I2C.o: I2C.c
 
 log.o: log.c
 	$(Agcc) -c -g log.c -o log.o
-	
+
+thermometer.o: thermometer.c
+	$(Agcc) -c -g thermometer.c -o thermometer.o
 clean: 
 	rm *.o *.axf

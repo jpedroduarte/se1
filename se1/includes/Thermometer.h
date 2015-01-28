@@ -5,6 +5,8 @@
 #ifndef THERMOMETER_H
 #define THERMOMETER_H
 
+#include "/home/user/Desktop/host-se1/se1/includes/I2C.h"
+
 /**
 * Devolve o valor da temperatura actual
 * @return retorna o valor da temperatura

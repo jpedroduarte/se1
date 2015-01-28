@@ -1,14 +1,20 @@
-/** @file termometer.h
+/** @file thermometer.h
 *  termometer module header.
 */
-#include "/home/user/Desktop/host-se1/se1/includes/I2C.h"
+#include "/home/user/Desktop/host-se1/se1/includes/thermometer.h"
 
 /**
 * Devolve o valor da temperatura actual
 * @return retorna o valor da temperatura
 */
 unsigned int getActualTemperature(){
-	return I2C_Transfer(0x90, 0, (void*)0xAA, 2, I2C_FREQ);
+	unsigned int a= 0x51;
+	unsigned int* data = &a;
+	unsigned t = I2C_Transfer(0x90, 1, (void*)data, 1, I2C_FREQ);
+	a = 0xAA;
+	t = I2C_Transfer(0x90, 1, (void*)data, 2, I2C_FREQ);
+	a=a;
+	return *data;
 }
 
 /**
@@ -16,7 +22,8 @@ unsigned int getActualTemperature(){
 * @return retorna o valor maximo da temperatura
 */
 unsigned int getMaxTemperature(){
-	return I2C_Transfer(0x90, 0, (void*)0xA1, 2, I2C_FREQ);
+	char data[1] = {0xA1};
+	return I2C_Transfer(0x90, 1, (void*)data, 2, I2C_FREQ);
 }
 
 /**
@@ -24,7 +31,8 @@ unsigned int getMaxTemperature(){
 * @return retorna o valor minimo da temperatura
 */
 unsigned int getMinTemperature(){
-	return I2C_Transfer(0x90, 0, (void*)0xA2, 2, I2C_FREQ);
+	char data[1] = {0xA2};
+	return I2C_Transfer(0x90, 1, (void*)data, 2, I2C_FREQ);
 }
 
 
@@ -41,7 +49,7 @@ char* convertTemperature(char* ptr, int pos, unsigned short temperature){
 	else
 		*(ptr + pos) = '+';
 
-	temp = (temp & 0x7F) >> 8;
+	temp = (temp & 0x7F00) >> 8;
 
 	*(ptr + pos + 1) = '0' + (temp / 100);
 	*(ptr + pos + 2) = '0' + ((temp % 100) / 10);
@@ -64,12 +72,12 @@ void getLogTemperature(char* ptr, int pos, unsigned short temperature){
 	unsigned short positive = (temp >> 4);
 	int frac;
 	if (signal == 0x8000){ //por o sinal de menos
-		*(tmp + pos) = '-';
+		*(ptr + pos) = '-';
 	}
 	else
-		*(tmp + pos) = '+';
+		*(ptr + pos) = '+';
 
-	temp = (temp & 0x7F) >> 8;
+	temp = (temp & 0x7F00) >> 8;
 
 	*(ptr + pos + 1) = '0' + (temp / 100);
 	*(ptr + pos + 2) = '0' + ((temp % 100) / 10);
@@ -80,7 +88,7 @@ void getLogTemperature(char* ptr, int pos, unsigned short temperature){
 		frac = (peso[3] * (neg * 0x8)) + (peso[2] * (neg * 0x4)) + (peso[1] * (neg * 0x2)) + (peso[0] * (neg * 0x1)) + peso[3];
 	}
 	else{
-		frac = (peso[3] * (positive * 0x8)) + (peso[2] * (positive * 0x4)) + (peso[1] * (positive * 0x2)) + (peso[0] * (positive * 0x1))
+		frac = (peso[3] * (positive * 0x8)) + (peso[2] * (positive * 0x4)) + (peso[1] * (positive * 0x2)) + (peso[0] * (positive * 0x1));
 	}
 	*(ptr + pos + 5) = '0' + (frac / 1000);
 	*(ptr + pos + 6) = '0' + ((frac % 1000) / 100);

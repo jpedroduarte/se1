@@ -16,7 +16,7 @@ typedef struct temp_memory_struct{
 }Temp_Memory;
 
 /**
- * Obter a temperatura numa deternimada posiçao
+ * Obter a temperatura numa determinada posiçao
  * @param i posiçao na memoria
  * @return o conteudo da posiçao passada como parametro
  */
