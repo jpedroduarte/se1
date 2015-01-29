@@ -24,7 +24,8 @@
 #define I2C_STO_FLAG	(0x010) 
 #define I2C_SI_FLAG		(0x08)  
 #define I2C_AA_FLAG		(0x04)   
-#define I2C_CLEAR_ALL_FLAGS	(I2C_I2EN_FLAG | I2C_STA_FLAG | I2C_SI_FLAG | I2C_AA_FLAG)
+//#define I2C_CLEAR_ALL_FLAGS	(I2C_I2EN_FLAG | I2C_STA_FLAG | I2C_SI_FLAG | I2C_AA_FLAG)
+#define I2C_CLEAR_ALL_FLAGS	(0x6C)
 
 /**
 * Valores dos estados possiveis em Master Mode para o I2C.I2STAT
@@ -48,7 +49,7 @@
 void I2C_Init(void){
 	LPC2106_PINSEL.PINSEL0 &= ~(I2C_PIN_MASK0);
 	LPC2106_PINSEL.PINSEL0 |= I2C_PIN_SEL0;
-	LPC2106_I2C.I2CONCLR = I2C_CLEAR_ALL_FLAGS;
+	//LPC2106_I2C.I2CONCLR = I2C_CLEAR_ALL_FLAGS;
 }
 
 /**
@@ -75,7 +76,7 @@ unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int
 	SCL = ((LPC2106_PCLK)/freq)/2; 
 	I2C_Start(SCL);
 	while(1){
-		res= LPC2106_I2C.I2CONSET;
+		res= LPC2106_I2C.I2DAT;
 		if((LPC2106_I2C.I2CONSET & I2C_SI_FLAG) == I2C_SI_FLAG){
 			res2 = LPC2106_I2C.I2STAT;
 			switch(LPC2106_I2C.I2STAT){
@@ -83,6 +84,8 @@ unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int
 				case I2C_STATE_REPEAT_START:
 					setSlaveAddr(addr, read);
 					LPC2106_I2C.I2CONCLR = I2C_STA_FLAG;
+					LPC2106_I2C.I2CONCLR = I2C_SI_FLAG;
+					break;
 				case I2C_STATE_SLAVE_ADDRESS_READ_ACK:
 					LPC2106_I2C.I2CONSET = I2C_AA_FLAG;
 					LPC2106_I2C.I2CONCLR = I2C_SI_FLAG;
@@ -95,6 +98,7 @@ unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int
 						LPC2106_I2C.I2CONCLR = I2C_AA_FLAG | I2C_SI_FLAG;
 						LPC2106_I2C.I2CONCLR = I2C_SI_FLAG;
 						I2C_Stop();
+						res= LPC2106_I2C.I2DAT;
 						return status;
 					}
 					LPC2106_I2C.I2CONSET = I2C_AA_FLAG;
@@ -129,10 +133,6 @@ unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int
 					return status;
 			}	
 		}
-		else{
-			int i =0;
-		}
-		
 	}
 }
 
@@ -166,7 +166,7 @@ void setSlaveAddr(unsigned char addr, int read){
 * Faz a escrita para o periférico
 */
 void I2C_Write(void *data){
-	memcpy(data, (void*)&LPC2106_I2C.I2DAT, sizeof(char));
+	LPC2106_I2C.I2DAT = *((unsigned int*)data);
 	LPC2106_I2C.I2CONCLR = I2C_SI_FLAG;
 }
 
@@ -174,7 +174,7 @@ void I2C_Write(void *data){
 * Faz a leitura da data devolovida pelo periférico
 */
 void I2C_Read(void *data){
-	memcpy((void*)&LPC2106_I2C.I2DAT, data, sizeof(char));
+	*((char*)data) =(char)LPC2106_I2C.I2DAT;
 	LPC2106_I2C.I2CONCLR = I2C_SI_FLAG;
 }
 

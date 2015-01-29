@@ -4,6 +4,7 @@
 #include "/home/user/Desktop/host-se1/se1/includes/Menu.h"
 #include "/home/user/Desktop/host-se1/se1/includes/ValueTypes.h"
 #include "/home/user/Desktop/host-se1/se1/includes/log.h"
+#include "/home/user/Desktop/host-se1/se1/includes/thermometer.h"
 
 #include <time.h>
 
@@ -16,7 +17,8 @@ void Execute();
 void Show();
 void Register();
 void Init();
-
+		
+Menu m;
 
 Menu *pm;
 
@@ -30,6 +32,9 @@ unsigned lastHour;
 struct tm dateTime = {0};
 
 Button bUpDown[2];
+Button allBut[3];
+
+Menu m;
 
 int main(){
 	Init();
@@ -37,8 +42,11 @@ int main(){
 	TempReg *pLog = log;
 	int i=0;
 	RTC_GetValue(pDateTime);
+	unsigned int t;
+	/*//LOG
 	while(i<5){
-		LOG_RegistDataTemp(pLog+i,pDateTime,i);
+		t = getActualTemperature();
+		LOG_RegistDataTemp(pLog+i,pDateTime,t);
 		pDateTime->tm_hour +=1;
 		i++;
 	}
@@ -48,7 +56,9 @@ int main(){
 		TMR0_Delay(3000);
 		i++;
 	}
-	while(1);
+
+	//FIM LOg*/
+	
 	RTC_GetValue(pDateTime);
 	//LCD_WriteString("MODO NORMAL");
 	while(1){
@@ -62,6 +72,10 @@ int main(){
 				Button_getState(pUD,1);
 				if((pUD)->currentState == just_released)
 					break;
+				LCD_On();
+				LCD_WriteString("button Up pressed");
+				TMR0_Delay(1000);
+				LCD_Off();
 			}
 			mod = SHOW;
 		}
@@ -70,6 +84,10 @@ int main(){
 				Button_getState(pUD+1,1);
 				if((pUD+1)->currentState == just_released)
 					break;
+				LCD_On();
+				LCD_WriteString("butt Down pressed");
+				TMR0_Delay(1000);
+				LCD_Off();
 			}
 			mod = SHOW;
 		}
@@ -90,18 +108,15 @@ void Init(){
 	dateTime.tm_year = 2015-1900;
 
 	pDateTime = &(dateTime);
-
+	
 	RTC_Init(pDateTime);
 	TMR0_Init(100000);
 	LCD_Init();
 	I2C_Init();
-	navSubMenu sbm = {
-		1,
-		1,
-		6
-	};
-
-	Menu m = { sbm };
+	LOG_Init();
+	m.sbm.curr = 1;
+	m.sbm.first = 1;
+	m.sbm.last = 6;
 	pm = &m;
 
 	Button bUp = Button_Init(0);
@@ -109,11 +124,9 @@ void Init(){
 	Button bOk = Button_Init(4);
 	bUpDown[0] = bUp;
 	bUpDown[1] = bDown;
-	Button allBut[3] = {
-		bOk,
-		bUp,
-		bDown
-	};
+	allBut[0] = bOk;
+	allBut[1] = bUp;
+	allBut[2] = bDown;
 	pButs = allBut;
 	pUD = bUpDown;
 	mod = APP;
