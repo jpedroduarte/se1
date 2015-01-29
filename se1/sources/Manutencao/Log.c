@@ -1,9 +1,46 @@
 #include "/home/user/Desktop/host-se1/se1/includes/Log.h"
 
+LOG log = {0};
+LOG *pLog;
+
+void LOG_Init(){
+	pLog = &log;
+	pLog->size = 168;
+	pLog->currSize = 0;
+	pLog->currPos = 0;
+	pLog->fully = 0;
+}
+
+void LOG_ShowNext(){
+	if(pLog->currSize ==0)
+		return;
+	int curr = (pLog->currPos) +1;
+	if(curr > pLog->currSize)
+		curr = 0;
+	pLog->currPos = curr;
+	TempReg *ptr = (TempReg*)(pLog->temps);
+	ptr += curr;
+	LOG_ShowRegist(ptr);
+}
+
+void LOG_ShowPrev(){
+	if(pLog->currSize ==0)
+	return;
+	int curr = pLog->currPos - 1;
+	if(curr < 0)
+		curr = pLog->currSize;
+	pLog->currPos = curr;
+	TempReg *ptr = (TempReg*)(pLog->temps);
+	ptr += curr;
+	LOG_ShowRegist(ptr);
+}
+
+
 void LOG_RegistDataTemp(TempReg *tr, struct tm *dateTime, unsigned int temp){
 	tr->timeData = Data2Int(dateTime);
 	tr->temp = (short)temp;
 }
+
 void LOG_ShowRegist(TempReg *tr){
 	char *str = "00:00 00-00-0000";
 	struct tm *dateTime = {0};
@@ -14,7 +51,7 @@ void LOG_ShowRegist(TempReg *tr){
 	n2str(str,dateTime->tm_mon & 0x0F,9);
 	year2str(str,dateTime->tm_year,12);
 	char *temp = "Tmp= S000,0000.C";
-	n2str(temp,tr->temp & 0xFF,5);
+	getLogTemperature(temp,5,tr->temp);
 	LCD_Clear();
 	LCD_WriteString(str);
 	LCD_Goto(1,0);

@@ -8,13 +8,14 @@
 * @return retorna o valor da temperatura
 */
 unsigned int getActualTemperature(){
-	unsigned int a= 0x51;
-	unsigned int* data = &a;
-	unsigned t = I2C_Transfer(0x90, 1, (void*)data, 1, I2C_FREQ);
-	a = 0xAA;
-	t = I2C_Transfer(0x90, 1, (void*)data, 2, I2C_FREQ);
-	a=a;
-	return *data;
+	unsigned int a = 0x51;
+	I2C_Transfer(0x90, 0, &a, 1, I2C_FREQ);
+	TMR0_Delay(1000);
+	a= 0xAA;
+	I2C_Transfer(0x90, 0, &a, 1, I2C_FREQ);
+	char buf[2] = {0,0};
+	I2C_Transfer(0x90, 1, &buf, 2, I2C_FREQ);
+	return (buf[0]<<8) | buf[1];
 }
 
 /**
@@ -40,17 +41,17 @@ unsigned int getMinTemperature(){
 * Devolve o valor da temperatura actual
 * @return retorna o valor da temperatura actual
 */
-char* convertTemperature(char* ptr, int pos, unsigned short temperature){
-	unsigned short temp = temperature & 0xFF00;
-	int signal = (temp & 0x8000);
-	if (signal == 0x8000){ //por o sinal de menos
+#define signalMask 0x80
+void convertTemperature(char* ptr, int pos, unsigned short temperature){
+	char temp = (temperature & 0xFF00)>>8;
+	int signal = (temp & signalMask);
+	if (signal == signalMask){ //por o sinal de menos
 		*(ptr + pos) = '-';
+		temp = ~temp;
 	}
 	else
 		*(ptr + pos) = '+';
-
-	temp = (temp & 0x7F00) >> 8;
-
+	
 	*(ptr + pos + 1) = '0' + (temp / 100);
 	*(ptr + pos + 2) = '0' + ((temp % 100) / 10);
 	*(ptr + pos + 3) = '0' + ((temp % 100) % 10);
@@ -64,35 +65,22 @@ char* convertTemperature(char* ptr, int pos, unsigned short temperature){
 * @return retorna a temperatura
 */
 void getLogTemperature(char* ptr, int pos, unsigned short temperature){
-
-	unsigned short temp = temperature & 0xFF00;
-	int signal = (temp & 0x8000);
-	int peso[] = { 5000, 2500, 1250, 625 };
-	unsigned short neg = ~(temp >> 4);
-	unsigned short positive = (temp >> 4);
-	int frac;
-	if (signal == 0x8000){ //por o sinal de menos
-		*(ptr + pos) = '-';
+	char s = (temperature & 0x8000)>>15;
+	convertTemperature(ptr,pos,temperature);
+	pos += 5;
+	int peso[] = { 0, 625, 1250, 0,2500, 0, 0, 0, 5000 };
+	 char f= (unsigned char)((temperature & 0xF0) >>4);
+	int frac = 0,i;
+	if(s){
+		frac = 625;
+		f = ~f;	
 	}
-	else
-		*(ptr + pos) = '+';
-
-	temp = (temp & 0x7F00) >> 8;
-
-	*(ptr + pos + 1) = '0' + (temp / 100);
-	*(ptr + pos + 2) = '0' + ((temp % 100) / 10);
-	*(ptr + pos + 3) = '0' + ((temp % 100) % 10);
-
-	//versao negativa
-	if (signal){
-		frac = (peso[3] * (neg * 0x8)) + (peso[2] * (neg * 0x4)) + (peso[1] * (neg * 0x2)) + (peso[0] * (neg * 0x1)) + peso[3];
+	for(i=1 ; i<=8 ; i<<=1){
+		frac += peso[f&i];
 	}
-	else{
-		frac = (peso[3] * (positive * 0x8)) + (peso[2] * (positive * 0x4)) + (peso[1] * (positive * 0x2)) + (peso[0] * (positive * 0x1));
-	}
-	*(ptr + pos + 5) = '0' + (frac / 1000);
-	*(ptr + pos + 6) = '0' + ((frac % 1000) / 100);
-	*(ptr + pos + 7) = '0' + ((frac % 100) / 10);
-	*(ptr + pos + 8) = '0' + ((frac % 100) % 10);
 
+	*(ptr + pos) = '0' + (frac / 1000);
+	*(ptr + pos + 1) = '0' + ((frac % 1000) / 100);
+	*(ptr + pos + 2) = '0' + ((frac % 100) / 10);
+	*(ptr + pos + 3) = '0' + ((frac % 100) % 10);
 }
