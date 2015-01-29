@@ -1,5 +1,5 @@
-/** @file thermometer.h
-*  termometer module header.
+/** @file Thermometer.h
+*  Termometer module header.
 */
 #include "/home/user/Desktop/host-se1/se1/includes/thermometer.h"
 

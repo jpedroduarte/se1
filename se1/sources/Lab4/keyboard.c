@@ -1,7 +1,6 @@
 #include "keyboard.h"
 #include "GPIO.h"
 
-//mudar as mascaras do config para aqui
 unsigned int col_mask  = 0x00000F00;
 unsigned int line_mask = 0x000000F0;
 unsigned int keys[16];
@@ -9,8 +8,10 @@ char key_idx[] = { 0xFF, 0, 1, 0xFF, 2, 0xFF, 0xFF, 0xFF ,3};
 
 
 
-/* Faz a iniciação do sistema para permitir o acesso ao periférico. Para tal,
-recebe como parâmetro o vetor com os códigos das 16 teclas (layout). */
+/**
+* Faz a iniciação do sistema para permitir o acesso ao periférico.
+* @param layout vetor com os códigos das 16 teclas
+*/
 void KBD_Init(unsigned int layout[16]){
 	GPIO_config(col_mask, col_mask | line_mask, 0);
 	int i;
@@ -18,8 +19,10 @@ void KBD_Init(unsigned int layout[16]){
 		keys[i] = layout[i];
 }
 
-/* Devolve 1 se existe alguma tecla pressionada e 0 no caso contrário. Não é
-bloqueante. */
+/**
+* Verifica se uma tecla foi precionada
+* @return 1 se existe alguma tecla pressionada e 0 no caso contrário.
+*/
 int KBD_Hit(void){
 	unsigned input = GPIO_input();
 	int res = (input & line_mask) >>4 ;
@@ -27,7 +30,10 @@ int KBD_Hit(void){
 	return res != 0;
 }
 
-/* Devolve o código da tecla pressionada. É bloqueante. */
+/**
+* Devolve o código da tecla pressionada, é bloqueante.
+* @return código da tecla pressionada
+*/
 int KBD_Read(void){
 	unsigned int i, init_col = 0x100, last_col = 0x800;
 	unsigned int line, aux, col;

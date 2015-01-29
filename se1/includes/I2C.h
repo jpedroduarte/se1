@@ -6,7 +6,9 @@
 
 #include <string.h>
 
-
+/**
+* Define a frequência da comunicação do I2C
+*/
 #define I2C_FREQ 100000
 /**
 * Faz a iniciação do sistema para permitir o acesso ao controlador I2C. 
