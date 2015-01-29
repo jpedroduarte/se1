@@ -12,26 +12,26 @@
 * Devolve o valor da temperatura actual
 * @return retorna o valor da temperatura
 */
-unsigned int getActualTemperature();
+unsigned int THERM_getActualTemperature();
 
 /**
 * Devolve o valor maximo da temperatura
 * @return retorna o valor maximo da temperatura
 */
-unsigned int getMaxTemperature();
+unsigned int THERM_getMaxTemperature();
 
 /**
 * Devolve o valor minimo da temperatura
 * @return retorna o valor minimo da temperatura
 */
-unsigned int getMinTemperature();
+unsigned int THERM_getMinTemperature();
 
 
 /**
 * Devolve o valor da temperatura actual
 * @return retorna o valor da temperatura actual
 */
-void convertTemperature(char* ptr, int pos, unsigned short temperature);
+void THERM_convertTemperature(char* ptr, int pos, unsigned short temperature);
 
 /**
 * Devolve a temperatura
@@ -40,6 +40,10 @@ void convertTemperature(char* ptr, int pos, unsigned short temperature);
 * @param temperature temperatura corrente
 * @return retorna a temperatura
 */
-void getLogTemperature(char* ptr, int pos, unsigned short temperature);
+void THERM_getLogTemperature(char* ptr, int pos, unsigned short temperature);
+
+
+char THERM_compareTemperature(short temp1, short temp2);
+short THERM_Temp2short(int degrees, int decDegres);
 
 #endif

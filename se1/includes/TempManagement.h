@@ -28,15 +28,15 @@ void TempManagement_Init(int pinMask);
 void TempManagement_TURN(int pinMask, TURN t); 
 
 Alarm Alarm_Init(int pinId);
-void Alarm_ON(Alarm a);
-void Alarm_OFF(Alarm a);
+void Alarm_ON(Alarm *a);
+void Alarm_OFF(Alarm *a);
 
 Cooling Cooling_Init(int pinId);
-void Cooling_ON(Cooling c);
-void Cooling_OFF(Cooling c);
+void Cooling_ON(Cooling *c);
+void Cooling_OFF(Cooling *c);
 
 Heating Heating_Init(int pinId);
-void Heating_ON(Heating h);
-void Heating_OFF(Heating h);
+void Heating_ON(Heating *h);
+void Heating_OFF(Heating *h);
 
 #endif

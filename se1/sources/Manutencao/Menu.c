@@ -5,10 +5,7 @@ void MENU_Navigation(Menu *m, nav n){
 	int curr = MENU_getCurr(m);
 	int last = MENU_getLast(m);
 	int first = MENU_getFirst(m);
-	if(n == OK) {
-		//ENTER MENU
-	}
-	else {
+	if(n != OK) {
 		curr += n;
 		if(curr > last)
 			curr = first;

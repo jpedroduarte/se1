@@ -5,6 +5,8 @@
 #include "/home/user/Desktop/host-se1/se1/includes/ValueTypes.h"
 #include "/home/user/Desktop/host-se1/se1/includes/log.h"
 #include "/home/user/Desktop/host-se1/se1/includes/thermometer.h"
+#include "/home/user/Desktop/host-se1/se1/includes/TempManagement.h"
+
 
 #include <time.h>
 
@@ -36,6 +38,10 @@ Button allBut[3];
 
 Menu m;
 
+Cooling c = {0};
+Heating h = {0};
+Alarm a = {0};
+
 int main(){
 	Init();
 	TempReg log[5] = {0};
@@ -43,8 +49,8 @@ int main(){
 	int i=0;
 	RTC_GetValue(pDateTime);
 	unsigned int t;
-	/*//LOG
-	while(i<5){
+	
+	/*while(i<5){
 		t = getActualTemperature();
 		LOG_RegistDataTemp(pLog+i,pDateTime,t);
 		pDateTime->tm_hour +=1;
@@ -62,7 +68,6 @@ int main(){
 	RTC_GetValue(pDateTime);
 	//LCD_WriteString("MODO NORMAL");
 	while(1){
-		// falta comunicar com o I2C de hora a hora e colocar na flash
 		if(mod == APP && Button_PressedMoreThan(bUpDown,2000,2) ==1){
 			mod = MANAGER;
 		}
@@ -114,6 +119,12 @@ void Init(){
 	LCD_Init();
 	I2C_Init();
 	LOG_Init();
+	
+	c = Cooling_Init(5);
+	h = Heating_Init(6);
+	
+	a = Alarm_Init(15);
+	
 	m.sbm.curr = 1;
 	m.sbm.first = 1;
 	m.sbm.last = 6;
@@ -143,9 +154,9 @@ void Execute(){
 			Show();
 			mod = APP;
 			break;
-		default:
-			mod = APP;
+		default:	
 			Register();
+			mod = APP;
 			break;
 	}
 	
@@ -237,10 +248,8 @@ void Register(){
 		lastHour = pDateTime->tm_hour;
 		LCD_On();
 		LCD_Clear();
-		char data[1] = {0xA1};
-		unsigned int TH = I2C_Transfer(0x90, 1, (void*)data, 1, I2C_FREQ); //temp actual
-		data[0] = 0xA2;
-		unsigned int TL = I2C_Transfer(0x90, 1, (void*)data, 1, I2C_FREQ); //temp actual
+		
+		
 
 		LCD_WriteString("REGISTER");
 		LCD_Off();

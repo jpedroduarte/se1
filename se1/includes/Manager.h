@@ -45,13 +45,13 @@ MenuInfo menus = {
 		 * Definir o valor de tmax
 		 * 
 		 * */
-		{"1 - Definir    "    , "TMax = 000 graus" , {0, {{1, 9, TEMP, -99, 99, 0}} , 1, SET} },
+		{"1 - Definir    "    , "   TMax = +020.C" , {0, {{1, 13, TEMP, -55, 125, 20}} , 1, SET} },
 		/** MENU 2 
 		 * 
 		 *  Definir o valor de tmin 
 		 * 
 		 * */
-		{"2 - Definir    "    , "TMin = 000 graus" , {0, {{1, 9, TEMP, -99, 99, 0}} , 1, SET} },
+		{"2 - Definir    "    , "   TMin = +010.C" , {0, {{1, 13, TEMP, -55, 125, 10}} , 1, SET} },
 		/** MENU 3 
 		 * 
 		 * Acertar o relógio
