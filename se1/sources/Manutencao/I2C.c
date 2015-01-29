@@ -159,7 +159,7 @@ void I2C_Stop(){
 * Afecta o endereço do periferico que se pretende comunicar
 */
 void setSlaveAddr(unsigned char addr, int read){
-	LPC2106_I2C.I2DAT = (addr) | (read & 1);
+	LPC2106_I2C.I2DAT = 0x90 | (addr) | (read & 1);
 }
 
 /**
