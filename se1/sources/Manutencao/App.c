@@ -43,7 +43,7 @@ Heating h = {0};
 Alarm a = {0};
 
 unsigned tmax ,tmin;
- 
+unsigned int timeCheck, timeSave;
 RegsLog tempRegistLog = {0};
 
 int main(){
@@ -71,57 +71,57 @@ int main(){
 	tmin =THERM_Temp2short(30);
 	RTC_GetValue(pDateTime);
 	while(1){
-		t = THERM_getActualTemperature();
-		if(THERM_compareTemperature((short)t,tmax) > 0 ){
-			Cooling_ON(&c);
-			now = TMR0_GetValue();
-			while(THERM_compareTemperature((short)t,tmax) > 0 ){
-				if(TicksToMS(TMR0_Elapsed(now)) >= 60000){
-					Alarm_ON(&a);
-					while(1){
-						Button_getState(pButs, 1);
-						if(pButs->currentState == just_pressed){
+		//t = THERM_getActualTemperature();
+		//if(THERM_compareTemperature((short)t,tmax) > 0 ){
+			//Cooling_ON(&c);
+			//now = TMR0_GetValue();
+			//while(THERM_compareTemperature((short)t,tmax) > 0 ){
+				//if(TicksToMS(TMR0_Elapsed(now)) >= 60000){
+					//Alarm_ON(&a);
+					//while(1){
+						//Button_getState(pButs, 1);
+						//if(pButs->currentState == just_pressed){
 				
-							while(1){
-								Button_getState(pButs,1);
-								if((pButs)->currentState == just_released)
-									break;
-							}
-							break;
-						}
-					}
-					Alarm_OFF(&a);
-					break;
-				}
-				t = THERM_getActualTemperature();
-			}
-			Cooling_OFF(&c);
-		}
-		if(THERM_compareTemperature((short)t,tmin) <0){
-			Heating_ON(&h);
-			now = TMR0_GetValue();
-			while(THERM_compareTemperature((short)t,tmin) <0){
+							//while(1){
+								//Button_getState(pButs,1);
+								//if((pButs)->currentState == just_released)
+									//break;
+							//}
+							//break;
+						//}
+					//}
+					//Alarm_OFF(&a);
+					//break;
+				//}
+				//t = THERM_getActualTemperature();
+			//}
+			//Cooling_OFF(&c);
+		//}
+		//if(THERM_compareTemperature((short)t,tmin) <0){
+			//Heating_ON(&h);
+			//now = TMR0_GetValue();
+			//while(THERM_compareTemperature((short)t,tmin) <0){
 				
-				if(TicksToMS(TMR0_Elapsed(now)) >= 60000){
-					Alarm_ON(&a);
-					while(1){
-						Button_getState(pButs, 1);
-						if(pButs->currentState == just_pressed){
-							while(1){
-								Button_getState(pButs,1);
-								if((pButs)->currentState == just_released)
-									break;
-							}
-							break;
-						}
-					}
-					Alarm_OFF(&a);
-					break;
-				}
-				t = THERM_getActualTemperature();
-			}
-			Heating_OFF(&h);
-		}
+				//if(TicksToMS(TMR0_Elapsed(now)) >= 60000){
+					//Alarm_ON(&a);
+					//while(1){
+						//Button_getState(pButs, 1);
+						//if(pButs->currentState == just_pressed){
+							//while(1){
+								//Button_getState(pButs,1);
+								//if((pButs)->currentState == just_released)
+									//break;
+							//}
+							//break;
+						//}
+					//}
+					//Alarm_OFF(&a);
+					//break;
+				//}
+				//t = THERM_getActualTemperature();
+			//}
+			//Heating_OFF(&h);
+		//}
 		if(mod == APP && Button_PressedMoreThan(bUpDown,2000,2) ==1){
 			mod = MANAGER;
 		}
@@ -145,6 +145,7 @@ int main(){
 		Execute();
 	}
 }
+
 void Init(){
 	// ir buscar o tempo currente
 	//time_t result = time(NULL); 
@@ -269,7 +270,8 @@ void Manutencao(){
 void Show(){
 	char *hour = "00:00";
 	char *date = "00-00-0000";
-
+	int tactual = THERM_getActualTemperature();
+	
 	RTC_GetValue(pDateTime);
 	n2str(date, pDateTime->tm_mday & 0x1F, 0);
 	n2str(date, pDateTime->tm_mon & 0x0F, 3);
@@ -279,11 +281,11 @@ void Show(){
 	
 	LCD_Clear();
 	LCD_On();
-	LCD_WriteString("Max:"); 
-	LCD_WriteString(""+tmax);
-	LCD_WriteChar(' ');
-	LCD_WriteString("Min:"); 
 	LCD_WriteString(""+tmin);
+	LCD_WriteChar('   ');
+	LCD_WriteString(""+tactual);
+	LCD_WriteChar('   ');
+	LCD_WriteString(""+tmax);	
 	LCD_Goto(1,0);
 	LCD_WriteString(date);
 	LCD_WriteChar(' ');
@@ -304,4 +306,32 @@ void Register(){
 		LCD_Off();
 	}
 	
+}
+
+int Check_Limits(int state){ //NOTA: nao e bem isto, preciso melhorar
+	unsigned t;
+	t = THERM_getActualTemperature();
+	if(state){ // quando ja esta em cooling ou heating 
+		if(THERM_compareTemperature((short)t,tmax)>0 || THERM_compareTemperature((short)t,tmin)<0){
+			if(TicksToMS(TMR0_Elapsed(timeCheck)) >= 60000){
+				Alarm_ON(&a); // para desligar o alarme e ver no main se foi carregado ok
+			}
+		}
+		return 0;
+	}
+	else{ //quando e activado a 1ªvez
+		if(THERM_compareTemperature((short)t,tmax)>0){
+			Cooling_ON(&c);
+			timeCheck = TMR0_GetValue();
+			return 1;
+		}
+		if(THERM_compareTemperature((short)t,tmin)<0){
+			Heating_ON(&h);
+			timeCheck = TMR0_GetValue();
+			return 1;
+		}
+		Cooling_OFF(&c);
+		Heating_OFF(&h);
+		return 0;
+	}
 }
