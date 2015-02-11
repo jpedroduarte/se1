@@ -11,6 +11,8 @@
  */
 typedef enum states {just_pressed, pressed, just_released, released} States;
 
+
+
 /**
  * Estrutura que define um botao
  */
@@ -49,7 +51,7 @@ void Button_setState(Button *b);
 void Button_getState(Button *b, int nBut);
 
 /**
- * Devolve 1 se o botao foi pressionado
+ * Devolve 1 se os botoes foram pressionados pelo menos durante t mili-segundos
  * @param b Botao da qual se pretende avaliar o estado
  * @param t tempo para o botao estar pressionado
  * @return retorna 0 ou 1
