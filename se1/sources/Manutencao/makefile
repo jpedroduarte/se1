@@ -51,6 +51,14 @@ insight: App.axf
 
 App.axf :  App.o Menu.o Manager.o I2C.o log.o thermometer.o TempManagement.o
 	$(Ald) $(OINIT) App.o Menu.o Manager.o I2C.o log.o thermometer.o TempManagement.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
+	
+AppB.axf: ButtonCTRL.o  ButtonCTRLTest.o
+	$(Ald) $(OINIT) ButtonCTRL.o ButtonCTRLTest.o -T $(LDSCRIPT) $(IALLLIBS) -o AppB.axf
+	$(Ainsight) AppB.axf
+ButtonCTRL.o : ButtonCTRL.c 
+	$(Agcc) -c -g ButtonCTRL.c -o ButtonCTRL.o
+ButtonCTRLTest.o : ButtonCTRLTest.c 
+	$(Agcc) -c -g ButtonCTRLTest.c -o ButtonCTRLTest.o
 
 App.o: App.c
 	$(Agcc) -c -g App.c -o App.o	

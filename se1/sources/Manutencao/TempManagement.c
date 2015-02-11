@@ -7,7 +7,7 @@ void TempManagement_Init(int pinMask){
 }
 
 void TempManagement_TURN(int pinMask, TURN t){
-	int value = t? pinMask : 0;
+	int value = t ? pinMask : 0;
 	GPIO_output(value,pinMask);
 }
 
