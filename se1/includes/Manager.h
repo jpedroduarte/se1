@@ -4,7 +4,9 @@
 #include "/home/user/Desktop/host-se1/se1/includes/ValueTypes.h"
 #include "/home/user/Desktop/host-se1/se1/includes/Menu.h"
 #include "/home/user/Desktop/host-se1/se1/includes/lcd.h"
+#include "/home/user/Desktop/host-se1/se1/includes/log.h"
 #include "/home/user/Desktop/host-se1/se1/includes/Button.h"
+#include "/home/user/Desktop/host-se1/se1/includes/thermometer.h"
 
 
 #define L0 0
@@ -92,9 +94,9 @@ char* Manager_getStringMenu(int curr, int line);
 void Manager_Print(Menu *m);
 ManagerInfo* Manager_getMenu(int curr);
 
-int Manager_Entry(Menu *m, Button *buts, int nButs);
+int Manager_Entry(Menu *m, Button *buts, int nButs, RegsLog *pRegLog);
 
-void Manager_Enter(EntryMode *e, Button *buts, int nButs);
+void Manager_Enter(EntryMode *e, Button *buts, int nButs, RegsLog *pRegLog);
 
 /**
  * SET MODE
@@ -115,7 +117,7 @@ int Manager_EntryGetY(Seter e);
 /**
  * LOG MODE
  * */
-void Manager_LogMode(EntryMode e);
+void Manager_LogMode(RegsLog *pRegLog, Button *buts, int nButs);
 //void Manager_ExitMode(EntryMode e);
 
 void updateVal(SetVal *vals,int x ,int y, int size, int op, int valSet);

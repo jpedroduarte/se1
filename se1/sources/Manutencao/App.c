@@ -42,13 +42,15 @@ Cooling c = {0};
 Heating h = {0};
 Alarm a = {0};
 
+unsigned tmax ,tmin;
+ 
+RegsLog tempRegistLog = {0};
+
 int main(){
 	Init();
-	TempReg log[5] = {0};
-	TempReg *pLog = log;
+	
 	int i=0;
 	RTC_GetValue(pDateTime);
-	unsigned int t;
 	
 	/*while(i<5){
 		t = getActualTemperature();
@@ -64,10 +66,62 @@ int main(){
 	}
 
 	//FIM LOg*/
-	
+	unsigned t, now;
+	tmax= THERM_Temp2short(35);
+	tmin =THERM_Temp2short(30);
 	RTC_GetValue(pDateTime);
-	//LCD_WriteString("MODO NORMAL");
 	while(1){
+		t = THERM_getActualTemperature();
+		if(THERM_compareTemperature((short)t,tmax) > 0 ){
+			Cooling_ON(&c);
+			now = TMR0_GetValue();
+			while(THERM_compareTemperature((short)t,tmax) > 0 ){
+				if(TicksToMS(TMR0_Elapsed(now)) >= 60000){
+					Alarm_ON(&a);
+					while(1){
+						Button_getState(pButs, 1);
+						if(pButs->currentState == just_pressed){
+				
+							while(1){
+								Button_getState(pButs,1);
+								if((pButs)->currentState == just_released)
+									break;
+							}
+							break;
+						}
+					}
+					Alarm_OFF(&a);
+					break;
+				}
+				t = THERM_getActualTemperature();
+			}
+			Cooling_OFF(&c);
+		}
+		if(THERM_compareTemperature((short)t,tmin) <0){
+			Heating_ON(&h);
+			now = TMR0_GetValue();
+			while(THERM_compareTemperature((short)t,tmin) <0){
+				
+				if(TicksToMS(TMR0_Elapsed(now)) >= 60000){
+					Alarm_ON(&a);
+					while(1){
+						Button_getState(pButs, 1);
+						if(pButs->currentState == just_pressed){
+							while(1){
+								Button_getState(pButs,1);
+								if((pButs)->currentState == just_released)
+									break;
+							}
+							break;
+						}
+					}
+					Alarm_OFF(&a);
+					break;
+				}
+				t = THERM_getActualTemperature();
+			}
+			Heating_OFF(&h);
+		}
 		if(mod == APP && Button_PressedMoreThan(bUpDown,2000,2) ==1){
 			mod = MANAGER;
 		}
@@ -77,10 +131,6 @@ int main(){
 				Button_getState(pUD,1);
 				if((pUD)->currentState == just_released)
 					break;
-				LCD_On();
-				LCD_WriteString("button Up pressed");
-				TMR0_Delay(1000);
-				LCD_Off();
 			}
 			mod = SHOW;
 		}
@@ -89,10 +139,6 @@ int main(){
 				Button_getState(pUD+1,1);
 				if((pUD+1)->currentState == just_released)
 					break;
-				LCD_On();
-				LCD_WriteString("butt Down pressed");
-				TMR0_Delay(1000);
-				LCD_Off();
 			}
 			mod = SHOW;
 		}
@@ -118,7 +164,12 @@ void Init(){
 	TMR0_Init(100000);
 	LCD_Init();
 	I2C_Init();
-	LOG_Init();
+	unsigned int t = THERM_getActualTemperature();
+	LOG_RegistDataTemp(&(pRegLog->temps[0]),pDateTime,t);
+	t = THERM_getActualTemperature();
+	LOG_RegistDataTemp(&(pRegLog->temps[1]),pDateTime,t);
+	
+	LOG_Init(pRegLog);
 	
 	c = Cooling_Init(5);
 	h = Heating_Init(6);
@@ -141,6 +192,7 @@ void Init(){
 	pButs = allBut;
 	pUD = bUpDown;
 	mod = APP;
+	pRegLog = &tempRegistLog;
 	lastHour =-1;
 }
 
@@ -159,8 +211,8 @@ void Execute(){
 			mod = APP;
 			break;
 	}
-	
 }
+
 void Manutencao(){
 	LCD_Clear();
 	LCD_On();
@@ -228,12 +280,10 @@ void Show(){
 	LCD_Clear();
 	LCD_On();
 	LCD_WriteString("Max:"); 
-	unsigned int max = I2C_Transfer(0x00, 0, (void*)0xA1, 2, I2C_FREQ); // temp max
-	LCD_WriteString(""+max);
+	LCD_WriteString(""+tmax);
 	LCD_WriteChar(' ');
 	LCD_WriteString("Min:"); 
-	unsigned int min = I2C_Transfer(0x00, 0, (void*)0xA2, 2, I2C_FREQ); // temp min
-	LCD_WriteString(""+min);
+	LCD_WriteString(""+tmin);
 	LCD_Goto(1,0);
 	LCD_WriteString(date);
 	LCD_WriteChar(' ');
@@ -248,9 +298,8 @@ void Register(){
 		lastHour = pDateTime->tm_hour;
 		LCD_On();
 		LCD_Clear();
-		
-		
-
+		short temp = THERM_Temp2short(THERM_getActualTemperature());
+		LOG_RegistDataTemp(&(pRegLog->temps[1]), pDateTime, temp); 
 		LCD_WriteString("REGISTER");
 		LCD_Off();
 	}

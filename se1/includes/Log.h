@@ -30,16 +30,17 @@ typedef struct tempReg{
  short temp;
 } TempReg;
 
+typedef struct regsLog{
+	int currSize;
+	TempReg temps[168];
+	short tmax,tmin;
+	int buf[2];
+}RegsLog;
+
+RegsLog *pRegLog;
 /**
 * Define o controlador do Log
 */
-typedef struct logCTRL{
- int size;
- int currSize;
- int currPos;
- int fully;
- TempReg temps[168];
-} LOG;
 
 /**
 * Inicia o Log

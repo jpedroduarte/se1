@@ -1,5 +1,5 @@
-/** @file Thermometer.h
-*  Termometer module header.
+/** @file thermometer.h
+*  termometer module header.
 */
 #include "/home/user/Desktop/host-se1/se1/includes/thermometer.h"
 
@@ -66,7 +66,7 @@ void THERM_convertTemperature(char* ptr, int pos, unsigned short temperature){
 */
 void THERM_getLogTemperature(char* ptr, int pos, unsigned short temperature){
 	char s = (temperature & 0x8000)>>15;
-	convertTemperature(ptr,pos,temperature);
+	THERM_convertTemperature(ptr,pos,temperature);
 	pos += 5;
 	int peso[] = { 0, 625, 1250, 0,2500, 0, 0, 0, 5000 };
 	 char f= (unsigned char)((temperature & 0xF0) >>4);
@@ -89,8 +89,8 @@ void THERM_getLogTemperature(char* ptr, int pos, unsigned short temperature){
  * (1) - temp1 > temp2 ; (0)  temp1 = temp2 ; (-1) temp1<temp2
  * 
  */
-char THERM_compareTemperature(short temp1, short temp2){
-	return (char)(temp1-temp2);
+int THERM_compareTemperature(short temp1, short temp2){
+	return (temp1-temp2);
 }
 
 short THERM_Temp2short(char degrees){

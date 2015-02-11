@@ -8,7 +8,7 @@
 *
 *
 */
-#define TEMP 4
+#define TEMP 3
 #define MM 2
 #define YEAR 4
 

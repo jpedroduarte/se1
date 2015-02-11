@@ -22,13 +22,13 @@ ManagerInfo* Manager_getMenu(int curr){
 	return ((ManagerInfo*)pMenus)+curr;
 }
 
-int Manager_Entry(Menu *m, Button *buts, int nButs){
+int Manager_Entry(Menu *m, Button *buts, int nButs, RegsLog *pRegLog){
 	currMenu = MENU_getCurr(m) -1;
 	int curr = MENU_getCurr(m)-1;
 	ManagerInfo* ptr = Manager_getMenu(curr);
 	EntryMode *e = &(ptr->enter);
 	e->on = 1;
-	Manager_Enter(e, buts, nButs);
+	Manager_Enter(e, buts, nButs,pRegLog);
 	if(e->mType != EXIT){
 		Manager_Print(m);
 		return 0; //CONTINUE IN MANAGER
@@ -36,7 +36,7 @@ int Manager_Entry(Menu *m, Button *buts, int nButs){
 	return 1; //EXIT MANAGER
 }
 
-void Manager_Enter(EntryMode *e, Button *buts, int nButs){
+void Manager_Enter(EntryMode *e, Button *buts, int nButs, RegsLog *pRegLog){
 	ManType mT = e->mType;
 	int x = 0, y=0;
 	switch(mT){
@@ -45,7 +45,9 @@ void Manager_Enter(EntryMode *e, Button *buts, int nButs){
 			break;
 		case LOG:
 			LCD_Clear();
-			LCD_WriteString("LOG TEMP******");
+			Manager_LogMode(pRegLog,buts,nButs);
+			
+			
 			TMR0_Delay(5000);
 			break;
 		case EXIT:
@@ -59,14 +61,7 @@ void Manager_Enter(EntryMode *e, Button *buts, int nButs){
 }
 
 void temp2str(char *str, int n, int p){
-	if(n<0){
-		*(str+p) = '-';
-		n *= -1;
-	}
-	else{
-		*(str+p) = ' ';
-	}
-	n2str(str,n,p+1);
+	THERM_convertTemperature(str,p-1,THERM_Temp2short(n));
 }
 
 int Manager_EntryGetX(Seter e){
@@ -158,7 +153,6 @@ void Manager_Setting(Seter *s, int seterSize, Button *buts, int nButs){
 				if((buts+1)->currentState == just_released || (buts+1)->currentState == released)
 					break;
 			}
-			
 		}
 		if((buts+2)->currentState == just_pressed ){
 			getXY(*s,&x ,&y);
@@ -171,4 +165,38 @@ void Manager_Setting(Seter *s, int seterSize, Button *buts, int nButs){
 			
 		}
 	}
+}
+
+void Manager_LogMode(RegsLog *pRegLog, Button *buts, int nButs){
+	if(pRegLog->currSize ==0){
+		LCD_Clear();
+		LCD_WriteString("Regist Empty");
+		TMR0_Delay(2000);
+		return;
+	}
+		
+	while(1){
+		Button_getState(buts, 3);
+		if(buts->currentState == just_pressed){
+			while(1){
+				Button_getState(buts+1,1);
+					if((buts+1)->currentState == just_released)
+						return;
+			}
+		}
+		if((buts+1)->currentState == just_pressed){
+			while(1){
+				Button_getState(buts+1,1);
+				if((buts+1)->currentState == just_released || (buts+1)->currentState == released){
+					LOG_ShowNext();
+					break;
+				}
+			}
+		}
+		if((buts+2)->currentState == just_pressed ){
+			//DOWN LOG
+			
+		}
+	}
+	
 }

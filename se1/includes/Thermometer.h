@@ -43,7 +43,7 @@ void THERM_convertTemperature(char* ptr, int pos, unsigned short temperature);
 void THERM_getLogTemperature(char* ptr, int pos, unsigned short temperature);
 
 
-char THERM_compareTemperature(short temp1, short temp2);
-short THERM_Temp2short(int degrees, int decDegres);
+int THERM_compareTemperature(short temp1, short temp2);
+short THERM_Temp2short(char degrees);
 
 #endif
