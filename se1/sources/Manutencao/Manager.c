@@ -22,6 +22,9 @@ ManagerInfo* Manager_getMenu(int curr){
 	return ((ManagerInfo*)pMenus)+curr;
 }
 
+
+//REMOVER buts e nButs
+//USAR BUTTONCTRL
 int Manager_Entry(Menu *m, Button *buts, int nButs, RegsLog *pRegLog){
 	currMenu = MENU_getCurr(m) -1;
 	int curr = MENU_getCurr(m)-1;

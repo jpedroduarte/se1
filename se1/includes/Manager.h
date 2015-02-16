@@ -5,7 +5,7 @@
 #include "/home/user/Desktop/host-se1/se1/includes/Menu.h"
 #include "/home/user/Desktop/host-se1/se1/includes/lcd.h"
 #include "/home/user/Desktop/host-se1/se1/includes/log.h"
-#include "/home/user/Desktop/host-se1/se1/includes/Button.h"
+#include "/home/user/Desktop/host-se1/se1/includes/ButtonCTRL.h"
 #include "/home/user/Desktop/host-se1/se1/includes/thermometer.h"
 
 

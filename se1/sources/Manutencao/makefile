@@ -49,8 +49,8 @@ Aas = $(ARM)as
 insight: App.axf
 	$(Ainsight) App.axf
 
-App.axf :  App.o Menu.o Manager.o I2C.o log.o thermometer.o TempManagement.o
-	$(Ald) $(OINIT) App.o Menu.o Manager.o I2C.o log.o thermometer.o TempManagement.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
+App.axf :  App.o Menu.o Manager.o I2C.o log.o thermometer.o TempManagement.o ButtonCTRL.o
+	$(Ald) $(OINIT) App.o Menu.o Manager.o I2C.o log.o thermometer.o TempManagement.o ButtonCTRL.o -T $(LDSCRIPT) $(IALLLIBS) -o App.axf
 	
 AppB.axf: ButtonCTRL.o  ButtonCTRLTest.o
 	$(Ald) $(OINIT) ButtonCTRL.o ButtonCTRLTest.o -T $(LDSCRIPT) $(IALLLIBS) -o AppB.axf

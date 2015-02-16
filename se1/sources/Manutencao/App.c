@@ -1,4 +1,4 @@
-#include "/home/user/Desktop/host-se1/se1/includes/Button.h"
+#include "/home/user/Desktop/host-se1/se1/includes/ButtonCTRL.h"
 #include "/home/user/Desktop/host-se1/se1/includes/I2C.h"
 #include "/home/user/Desktop/host-se1/se1/includes/LPC2xxx.h"
 #include "/home/user/Desktop/host-se1/se1/includes/Menu.h"
@@ -24,8 +24,8 @@ Menu m;
 
 Menu *pm;
 
-Button *pButs;
-Button *pUD;
+//Button *pButs;
+//Button *pUD;
 unsigned mod;
 
 struct tm *pDateTime;
@@ -33,8 +33,8 @@ unsigned lastHour;
 
 struct tm dateTime = {0};
 
-Button bUpDown[2];
-Button allBut[3];
+//Button bUpDown[2];
+//Button allBut[3];
 
 Menu m;
 
@@ -70,7 +70,23 @@ int main(){
 	tmax= THERM_Temp2short(35);
 	tmin =THERM_Temp2short(30);
 	RTC_GetValue(pDateTime);
+	int buttons;
 	while(1){
+		buttons = BUTTONCTRL_GetButtonsEvolution();
+		//MODO MANUTENCAO
+		if(mod == APP && (buttons == UPDOWNPRESSED)){
+			LCD_Clear();
+			LCD_WriteString("MANUTENCAO");
+			while(!BUTTONCTRL_RELEASE());
+			mod = MANAGER;
+		}
+		//MOSTRAR TEMP ACT
+		if(mod == APP && (buttons == UPPRESSED || buttons == DOWNPRESSED)){
+			LCD_Clear();
+			LCD_WriteString("SHOW");
+			while(!BUTTONCTRL_RELEASE());
+		}
+		
 		//t = THERM_getActualTemperature();
 		//if(THERM_compareTemperature((short)t,tmax) > 0 ){
 			//Cooling_ON(&c);
@@ -122,6 +138,8 @@ int main(){
 			//}
 			//Heating_OFF(&h);
 		//}
+		
+		/*
 		if(mod == APP && Button_PressedMoreThan(bUpDown,2000,2) ==1){
 			mod = MANAGER;
 		}
@@ -142,6 +160,7 @@ int main(){
 			}
 			mod = SHOW;
 		}
+		*/
 		Execute();
 	}
 }
@@ -182,16 +201,9 @@ void Init(){
 	m.sbm.last = 6;
 	pm = &m;
 
-	Button bUp = Button_Init(0);
-	Button bDown = Button_Init(1);
-	Button bOk = Button_Init(4);
-	bUpDown[0] = bUp;
-	bUpDown[1] = bDown;
-	allBut[0] = bOk;
-	allBut[1] = bUp;
-	allBut[2] = bDown;
-	pButs = allBut;
-	pUD = bUpDown;
+	//OK pin 4, UP pin 0, DOWN pin 1, Time to Pressed UP/DOWN 2000ms(2s)
+	BUTTONCTRL_Init(4,0,1,2000);
+	
 	mod = APP;
 	pRegLog = &tempRegistLog;
 	lastHour =-1;
@@ -221,17 +233,12 @@ void Manutencao(){
 	LCD_WriteString("Modo de");
 	LCD_Goto(1,6);
 	LCD_WriteString("Manutencao");
+
 	TMR0_Delay(3000);
-	while(1){
-		Button_getState(pButs, 3);
-		if(pButs->currentState == released &&
-			(pButs+1)->currentState == released &&
-			(pButs+2)->currentState == released)
-			break;
-	}
 	
 	Manager_Print(pm);
 	while(1){
+		
 		Button_getState(pButs, 3);
 		if(pButs->currentState == just_pressed){
 			
@@ -264,7 +271,7 @@ void Manutencao(){
 			Manager_Print(pm);
 			TMR0_Delay(1000);
 		} 
-	}
+	}*/
 }
 
 void Show(){
@@ -282,9 +289,9 @@ void Show(){
 	LCD_Clear();
 	LCD_On();
 	LCD_WriteString(""+tmin);
-	LCD_WriteChar('   ');
+	//LCD_WriteChar('   ');
 	LCD_WriteString(""+tactual);
-	LCD_WriteChar('   ');
+	//LCD_WriteChar('   ');
 	LCD_WriteString(""+tmax);	
 	LCD_Goto(1,0);
 	LCD_WriteString(date);
