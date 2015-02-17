@@ -235,21 +235,27 @@ void Manutencao(){
 	LCD_WriteString("Manutencao");
 
 	TMR0_Delay(3000);
-	
+	int buttons;
 	Manager_Print(pm);
 	while(1){
-		
-		Button_getState(pButs, 3);
-		if(pButs->currentState == just_pressed){
-			
-			while(1){
-				Button_getState(pButs,1);
-				if((pButs)->currentState == just_released)
-					break;
-			}
+		buttons = BUTTONCTRL_GetButtonsEvolution();
+		//MODO MANUTENCAO
+		if(buttons == OKPRESSED)){
+			while(!BUTTONCTRL_RELEASE());
 			if(Manager_Entry(pm, pButs,3))
 				break;
+		}		
+		
+		else if(buttons == UPPRESSED)){
+			while(!BUTTONCTRL_RELEASE());
+			
 		}
+		
+		else if(buttons == DOWNPRESSED)){
+			while(!BUTTONCTRL_RELEASE());
+			
+		}
+			
 		
 		if((pButs+1)->currentState == just_pressed){
 			while(1){
